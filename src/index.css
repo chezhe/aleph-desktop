@@ -79,3 +79,17 @@ samp:before {
   color: #aaa;
   content: '/';
 }
+
+.launch-image {
+  position: relative;
+  animation: launch-up 8s infinite ease-in-out;
+}
+
+@keyframes launch-up {
+  0% {
+    bottom: 0;
+  }
+  100% {
+    bottom: 100vh;
+  }
+}

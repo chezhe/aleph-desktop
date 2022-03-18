@@ -1,7 +1,7 @@
-import { Box, Button, Text } from 'grommet'
+import { Box, Button } from 'grommet'
 import { Add, Search } from 'grommet-icons'
 import { useState } from 'react'
-import { Source } from '../types'
+import { Digest, Source } from '../types'
 import AddSource from './AddSource'
 import Feeds from './Feeds'
 import Folders from './Folders'
@@ -11,24 +11,31 @@ export default function SourceList({
   sources,
   active,
   setActive,
+  itemList,
 }: {
   sources: Source[]
   active: number
   setActive: (active: number) => void
+  itemList: Digest[]
 }) {
   const [visible, setVisible] = useState(false)
   return (
     <Box width="200px" background="light-3" style={{ position: 'relative' }}>
       <Box
         height="calc(100vh - 50px)"
-        pad={{ top: 'medium', left: 'medium', right: 'small', bottom: '60px' }}
+        pad={{ top: 'medium', left: 'medium', right: 'small', bottom: '20px' }}
         style={{ overflowY: 'scroll', position: 'relative' }}
       >
         <Box>
           <Logo />
         </Box>
         <Folders />
-        <Feeds sources={sources} active={active} setActive={setActive} />
+        <Feeds
+          sources={sources}
+          itemList={itemList}
+          active={active}
+          setActive={setActive}
+        />
       </Box>
 
       <Box
@@ -38,7 +45,7 @@ export default function SourceList({
         direction="row"
         align="center"
         justify="between"
-        background="light-6"
+        background="light-3"
       >
         <Button
           icon={<Add size="16" style={{ cursor: 'pointer' }} />}

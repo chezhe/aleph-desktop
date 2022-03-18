@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.0",
     "@tauri-apps/api": "^1.0.0-rc.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
@@ -11,6 +12,7 @@
     "@types/node": "^16.7.13",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
+    "axios": "^0.26.1",
     "dayjs": "^1.11.0",
     "fast-xml-parser": "^4.0.7",
     "grommet": "^2.21.0",
@@ -18,9 +20,10 @@
     "react": "^17.0.2",
     "react-audio-player": "^0.17.0",
     "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
     "react-scripts": "5.0.0",
-    "rss-parser": "^3.12.0",
     "styled-components": "^5.3.3",
+    "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#cf6c28d50446d480379e1af22aad1ea22b0d887f",
     "turndown": "^7.1.1",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"

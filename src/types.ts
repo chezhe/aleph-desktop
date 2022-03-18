@@ -17,6 +17,9 @@ export interface Digest {
   title: string
   guid?: string
   'content:encoded'?: string
+  read?: boolean
+  starred?: boolean
+  source?: string
 }
 
 export interface Channel {

@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import ReactAudioPlayer from 'react-audio-player'
 import NoContent from '../assets/no-content.png'
 import { Archive, Star } from 'grommet-icons'
+import { useAppDispatch } from '../store/hooks'
 
 const turndownService = new TurndownService()
 
@@ -13,6 +14,8 @@ export default function Reader({
 }: {
   activeItem: Digest | undefined
 }) {
+  const dispatch = useAppDispatch()
+
   if (!activeItem) {
     return (
       <Box
@@ -51,7 +54,12 @@ export default function Reader({
         border={{ side: 'bottom', size: 'medium', color: 'light-6' }}
       >
         <Button icon={<Archive />} />
-        <Button icon={<Star />} />
+        <Button
+          icon={<Star color={activeItem.starred ? 'plain' : ''} />}
+          onClick={() => {
+            dispatch({ type: 'item/star', payload: activeItem })
+          }}
+        />
       </Box>
       <Heading level={2} margin={{ bottom: '0' }}>
         {activeItem?.title}
