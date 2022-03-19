@@ -25,10 +25,6 @@ export async function fetchFeed(source: Source): Promise<Source[]> {
       })
       const jObj = parser.parse(data as string)
       return jObj.rss?.channel.item.map(formatItem)
-      // .sort(
-      //   (a: Episode, b: Episode) =>
-      //     dayjs(a.pubDate).unix() - dayjs(b.pubDate).unix()
-      // )
     })
     .catch((err) => {
       console.log(err)

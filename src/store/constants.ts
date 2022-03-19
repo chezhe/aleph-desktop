@@ -11,7 +11,7 @@ export const EXAMPLE_FEEDS = [
   {
     name: '八分',
     url: 'https://api.vistopia.com.cn/rss/program/11.xml',
-    type: SourceType.RSS,
+    type: SourceType.PODCAST,
   },
   {
     name: 'sspai',
@@ -21,7 +21,7 @@ export const EXAMPLE_FEEDS = [
   {
     name: '一天世界',
     url: 'https://yitianshijie.net/feed/audio.xml',
-    type: SourceType.RSS,
+    type: SourceType.PODCAST,
   },
   {
     name: '卫报',

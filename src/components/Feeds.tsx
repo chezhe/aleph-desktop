@@ -1,8 +1,10 @@
 import { Box, Button, Heading, Text } from 'grommet'
 import { SettingsOption } from 'grommet-icons'
+import { useState } from 'react'
 import { useAppSelector } from '../store/hooks'
 import { Episode, Source } from '../types'
 import { getEpisodeId } from '../utils/format'
+import ManageFeed from './ManageFeed'
 
 export default function Feeds({
   sources,
@@ -17,6 +19,7 @@ export default function Feeds({
   setEpisodes: (episodes: Episode[]) => void
   setActiveSource: (source: string) => void
 }) {
+  const [visible, setVisible] = useState(false)
   const vieweds = useAppSelector((state) => state.item.vieweds)
 
   return (
@@ -35,9 +38,11 @@ export default function Feeds({
           size="small"
           icon={<SettingsOption size="18px" />}
           style={{ padding: 0 }}
-          onClick={() => {}}
+          onClick={() => setVisible(true)}
         />
       </Box>
+
+      {visible && <ManageFeed onClose={() => setVisible(false)} />}
 
       <Box pad={{ left: 'small' }}>
         {sources.map((source, idx) => (

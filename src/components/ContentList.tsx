@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { Box, Button, Markdown, Text, Image } from 'grommet'
 import { Episode } from '../types'
 import TurndownService from 'turndown'
-import { ClearOption, Ascend, Descend } from 'grommet-icons'
+import { Ascend, Descend, Checkmark } from 'grommet-icons'
 import Launch from '../assets/launch.png'
 import { useEffect, useRef, useState } from 'react'
 import _ from 'lodash'
@@ -65,7 +65,7 @@ export default function ContentList({
             }}
           />
           <Button
-            icon={<ClearOption />}
+            icon={<Checkmark />}
             a11yTitle="Read All"
             onClick={() => {
               dispatch({ type: 'item/readAll', payload: episodes })
