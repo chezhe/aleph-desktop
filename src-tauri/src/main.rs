@@ -3,15 +3,18 @@
   windows_subsystem = "windows"
 )]
 
-use tauri_plugin_store::PluginBuilder;
+use tauri_plugin_store::{PluginBuilder, StoreBuilder};
 use tauri::{Menu, MenuItem, Submenu, CustomMenuItem, MenuEntry, Manager};
 use tauri::api::{shell};
 
 fn main() {
   let ctx = tauri::generate_context!();
 
+  let profile = StoreBuilder::new(".profile".parse().unwrap())
+    .build();
+
   tauri::Builder::default()
-    .plugin(PluginBuilder::default().build())
+    .plugin(PluginBuilder::default().stores([profile]).build())
     .menu(Menu::with_items([
       #[cfg(target_os = "macos")]
       MenuEntry::Submenu(Submenu::new(

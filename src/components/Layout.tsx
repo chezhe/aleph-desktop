@@ -44,16 +44,16 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
       })
       .catch(console.log)
 
-    getValue('itemvieweds')
-      .then((result: any) => {
-        if (result?.value) {
-          dispatch({
-            type: 'item/readAll',
-            payload: JSON.parse(result.value),
-          })
-        }
-      })
-      .catch(console.log)
+    // getValue('itemvieweds')
+    //   .then((result: any) => {
+    //     if (result?.value) {
+    //       dispatch({
+    //         type: 'item/readAll',
+    //         payload: JSON.parse(result.value),
+    //       })
+    //     }
+    //   })
+    //   .catch(console.log)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -73,7 +73,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   }, [])
 
   return (
-    <Grommet theme={grommet}>
+    <Grommet theme={grommet} themeMode="dark">
       {/* <TitleBar /> */}
       <Box direction="row" width="100%">
         <Sidebar

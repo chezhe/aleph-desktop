@@ -10,7 +10,15 @@ export default function ManageFeed({ onClose }: { onClose: () => void }) {
   return (
     <Layer onClickOutside={onClose}>
       <Box pad="small" gap="small">
-        <Box direction="row" justify="end">
+        <Box
+          direction="row"
+          justify="end"
+          border={{
+            side: 'bottom',
+            size: 'medium',
+            color: 'light-3',
+          }}
+        >
           <Button size="small" icon={<Close size="16px" />} onClick={onClose} />
         </Box>
         <Box width="600px" height="400px" style={{ overflowY: 'scroll' }}>
@@ -21,7 +29,11 @@ export default function ManageFeed({ onClose }: { onClose: () => void }) {
                 direction="row"
                 align="center"
                 justify="between"
-                border={{ side: 'bottom', size: 'xsmall' }}
+                border={{
+                  side: 'bottom',
+                  size: 'xsmall',
+                  style: 'dashed',
+                }}
                 pad="small"
               >
                 <Box direction="row" align="center" gap="small">

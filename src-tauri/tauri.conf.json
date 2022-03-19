@@ -14,7 +14,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "aleph.chezhe.dev",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -56,6 +56,9 @@
         "all": true,
         "request": true,
         "scope": ["https://**", "http://**"]
+      },
+      "notification": {
+        "all": true
       }
     },
     "windows": [
