@@ -1,4 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
+import { fetch, ResponseType } from '@tauri-apps/api/http'
 import { Source } from '../types'
 
 let fetching = false
@@ -13,19 +14,29 @@ export function fetchSources(sources: Source[]) {
 }
 
 export async function fetchFeed(source: Source): Promise<Source[]> {
-  return fetch(`${source.url}`)
-    .then((response) => response.text())
+  return fetch(`${source.url}`, {
+    method: 'GET',
+    responseType: ResponseType.Text,
+  })
+    .then((response) => response.data)
     .then((data) => {
       const parser = new XMLParser({
         ignoreAttributes: false,
       })
-      const jObj = parser.parse(data)
+      const jObj = parser.parse(data as string)
       return jObj.rss?.channel.item.map(formatItem)
+      // .sort(
+      //   (a: Episode, b: Episode) =>
+      //     dayjs(a.pubDate).unix() - dayjs(b.pubDate).unix()
+      // )
     })
-    .catch(() => [])
+    .catch((err) => {
+      console.log(err)
+      return []
+    })
 }
 
-function formatItem(item: any) {
+export function formatItem(item: any) {
   let newItem = item
   if (item.enclosure) {
     newItem = {

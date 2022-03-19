@@ -1,27 +1,35 @@
 import { Box, Button, Heading, Text } from 'grommet'
 import { SettingsOption } from 'grommet-icons'
+import { useAppSelector } from '../store/hooks'
 import { Episode, Source } from '../types'
+import { getEpisodeId } from '../utils/format'
 
 export default function Feeds({
   sources,
-  active,
-  setActive,
+  activeSource,
   itemList,
+  setEpisodes,
+  setActiveSource,
 }: {
   sources: Source[]
-  active: number
-  setActive: (active: number) => void
+  activeSource: string
   itemList: Episode[]
+  setEpisodes: (episodes: Episode[]) => void
+  setActiveSource: (source: string) => void
 }) {
+  const vieweds = useAppSelector((state) => state.item.vieweds)
+
   return (
     <Box>
       <Box
         direction="row"
         align="center"
         justify="between"
-        margin={{ bottom: 'xsmall' }}
+        pad={{ vertical: 'small' }}
       >
-        <Heading level={3}>Feeds</Heading>
+        <Heading level={3} margin="none">
+          Feeds
+        </Heading>
 
         <Button
           size="small"
@@ -39,16 +47,22 @@ export default function Feeds({
             direction="row"
             align="center"
             justify="between"
-            background={active === idx ? 'light-6' : ''}
-            onClick={() => setActive(idx)}
+            background={activeSource === source.name ? 'light-6' : ''}
+            onClick={() => {
+              setEpisodes(itemList.filter((t) => t.source === source.name))
+              setActiveSource(source.name)
+            }}
             style={{ boxShadow: 'none', borderRadius: 4, minHeight: 'unset' }}
           >
             <Text size="small">{source.name}</Text>
             <Box background="">
               <Text size="small" color="neutral-3" weight="bold">
                 {
-                  itemList.filter((t) => t.source === source.name && !t.read)
-                    .length
+                  itemList.filter(
+                    (t) =>
+                      t.source === source.name &&
+                      !vieweds.includes(getEpisodeId(t))
+                  ).length
                 }
               </Text>
             </Box>

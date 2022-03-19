@@ -1,3 +1,8 @@
+export enum Category {
+  FOLDER = 'folder',
+  FEED = 'feed',
+}
+
 export enum SourceType {
   RSS = 'rss',
   PODCAST = 'podcast',

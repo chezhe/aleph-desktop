@@ -9,14 +9,16 @@ import Logo from './Logo'
 
 export default function SourceList({
   sources,
-  active,
-  setActive,
+  activeSource,
   itemList,
+  setEpisodes,
+  setActiveSource,
 }: {
   sources: Source[]
-  active: number
-  setActive: (active: number) => void
+  activeSource: string
   itemList: Episode[]
+  setEpisodes: (episodes: Episode[]) => void
+  setActiveSource: (source: string) => void
 }) {
   const [visible, setVisible] = useState(false)
   return (
@@ -29,12 +31,17 @@ export default function SourceList({
         <Box>
           <Logo />
         </Box>
-        <Folders />
+        <Folders
+          activeSource={activeSource}
+          setEpisodes={setEpisodes}
+          setActiveSource={setActiveSource}
+        />
         <Feeds
           sources={sources}
           itemList={itemList}
-          active={active}
-          setActive={setActive}
+          activeSource={activeSource}
+          setEpisodes={setEpisodes}
+          setActiveSource={setActiveSource}
         />
       </Box>
 

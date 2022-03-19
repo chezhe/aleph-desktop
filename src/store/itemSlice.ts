@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Episode } from '../types'
 import type { RootState } from './index'
-import { excludeItem, isContained } from '../utils/format'
+import { excludeItem, getEpisodeId, isContained } from '../utils/format'
+import { setValue } from '../utils/storage'
+import _ from 'lodash'
 
 interface ItemState {
   list: Episode[]
   starreds: Episode[]
-  vieweds: Episode[]
+  vieweds: string[]
 }
 
 const initialState: ItemState = {
@@ -23,16 +25,30 @@ export const itemSlice = createSlice({
       state.list = [...state.list, action.payload]
     },
     concat: (state, action: PayloadAction<Episode[]>) => {
-      state.list = [...state.list, ...action.payload]
+      state.list = _.uniqBy(
+        [...state.list, ...action.payload],
+        (t) => t.guid || t.link
+      )
     },
     init: (state, action: PayloadAction<Episode[]>) => {
-      state.list = action.payload
+      state.list = _.uniqBy(
+        [...state.list, ...action.payload],
+        (t) => t.guid || t.link
+      )
     },
     read: (state, action: PayloadAction<Episode>) => {
-      state.vieweds = [...state.vieweds, action.payload]
+      state.vieweds = _.uniq([
+        ...state.vieweds,
+        action.payload.guid || action.payload.link,
+      ])
+      setValue('itemvieweds', JSON.stringify(state.vieweds))
     },
     readAll: (state, action: PayloadAction<Episode[]>) => {
-      state.vieweds = [...state.vieweds, ...action.payload]
+      state.vieweds = _.uniq([
+        ...state.vieweds,
+        ...action.payload.map(getEpisodeId),
+      ])
+      setValue('itemvieweds', JSON.stringify(state.vieweds))
     },
     star: (state, action: PayloadAction<Episode>) => {
       if (isContained(action.payload, state.starreds)) {
@@ -40,11 +56,19 @@ export const itemSlice = createSlice({
       } else {
         state.starreds = [...state.starreds, action.payload]
       }
+      setValue('itemstarreds', JSON.stringify(state.starreds))
+    },
+    starAll: (state, action: PayloadAction<Episode[]>) => {
+      state.starreds = _.uniqBy(
+        [...state.starreds, ...action.payload],
+        (t) => t.guid || t.link
+      )
     },
   },
 })
 
-export const { append, init, read, star, concat, readAll } = itemSlice.actions
+export const { append, init, read, star, concat, readAll, starAll } =
+  itemSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectSource = (state: RootState) => state.item.list

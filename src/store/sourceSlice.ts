@@ -1,89 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Source, SourceType } from '../types'
+import { Source } from '../types'
 import type { RootState } from './index'
+import { setValue } from '../utils/storage'
+import { EXAMPLE_FEEDS } from './constants'
 
 interface SourceState {
   list: Source[]
 }
 
 const initialState: SourceState = {
-  list: [
-    {
-      name: '日坛公园',
-      url: 'https://www.ximalaya.com/album/5574153.xml',
-      type: SourceType.PODCAST,
-    },
-    {
-      name: '八分',
-      url: 'https://api.vistopia.com.cn/rss/program/11.xml',
-      type: SourceType.RSS,
-    },
-    {
-      name: 'sspai',
-      url: 'https://sspai.com/feed',
-      type: SourceType.RSS,
-    },
-    {
-      name: '一天世界',
-      url: 'http://yitianshijie.net/feed/audio.xml',
-      type: SourceType.RSS,
-    },
-    {
-      name: '卫报',
-      url: 'https://www.theguardian.com/international/rss',
-      type: SourceType.RSS,
-    },
-    {
-      name: 'NYTimes',
-      url: 'https://cn.nytimes.com/rss/',
-      type: SourceType.RSS,
-    },
-    {
-      name: '文化有限',
-      url: 'https://s1.proxy.wavpub.com/weknownothing.xml',
-      type: SourceType.PODCAST,
-    },
-    {
-      name: '声东击西',
-      url: 'https://feeds.fireside.fm/shengdongjixi/rss',
-      type: SourceType.PODCAST,
-    },
-    {
-      name: '故事 FM',
-      url: 'https://storyfm.cn/feed/episodes',
-      type: SourceType.PODCAST,
-    },
-    {
-      name: '姜思达',
-      url: 'https://feed.xyzfm.space/tdjvf7vfnbqq',
-      type: SourceType.PODCAST,
-    },
-    {
-      name: 'Steve说',
-      url: 'https://feeds.fireside.fm/steve/rss',
-      type: SourceType.PODCAST,
-    },
-    {
-      name: '凹凸电波',
-      url: 'http://www.ximalaya.com/album/19206382.xml',
-      type: SourceType.PODCAST,
-    },
-    {
-      name: '来都来了',
-      url: 'http://www.ximalaya.com/album/31677988.xml',
-      type: SourceType.PODCAST,
-    },
-    {
-      name: '无聊斋',
-      url: 'http://www.ximalaya.com/album/14302859.xml',
-      type: SourceType.PODCAST,
-    },
-    {
-      name: '不合时宜',
-      url: 'https://feed.xyzfm.space/ww7cqnybekty',
-      type: SourceType.PODCAST,
-    },
-  ],
+  list: EXAMPLE_FEEDS,
+  // list: [],
 }
 
 export const sourceSlice = createSlice({
@@ -92,14 +19,17 @@ export const sourceSlice = createSlice({
   reducers: {
     append: (state, action: PayloadAction<Source>) => {
       state.list = [...state.list, action.payload]
+      setValue('source', JSON.stringify(state.list))
     },
     init: (state, action: PayloadAction<Source[]>) => {
       state.list = action.payload
+      setValue('source', JSON.stringify(state.list))
     },
     remove: (state, action: PayloadAction<Source>) => {
       state.list = state.list.filter(
         (source) => source.name !== action.payload.name
       )
+      setValue('source', JSON.stringify(state.list))
     },
   },
 })
