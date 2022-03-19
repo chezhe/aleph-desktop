@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import sourceReducer from './sourceSlice'
 import itemReducer from './itemSlice'
-import { setValue } from '../utils/storage'
+// import { setValue } from '../utils/storage'
 
 const store = configureStore({
   reducer: {
