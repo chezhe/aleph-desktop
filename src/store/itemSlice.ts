@@ -1,15 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Digest } from '../types'
 import type { RootState } from './index'
+import { excludeItem, isContained } from '../utils/format'
 
 interface ItemState {
   list: Digest[]
   starreds: Digest[]
+  vieweds: Digest[]
 }
 
 const initialState: ItemState = {
   list: [],
   starreds: [],
+  vieweds: [],
 }
 
 export const itemSlice = createSlice({
@@ -26,29 +29,22 @@ export const itemSlice = createSlice({
       state.list = action.payload
     },
     read: (state, action: PayloadAction<Digest>) => {
-      state.list = state.list.map((item) => {
-        if (
-          (item.guid && item.guid === action.payload.guid) ||
-          (item.link && item.link === action.payload.link)
-        ) {
-          item.read = true
-        }
-        return item
-      })
+      state.vieweds = [...state.vieweds, action.payload]
+    },
+    readAll: (state, action: PayloadAction<Digest[]>) => {
+      state.vieweds = [...state.vieweds, ...action.payload]
     },
     star: (state, action: PayloadAction<Digest>) => {
-      state.starreds = [...state.starreds, action.payload]
-      state.list = state.list.map((item) => {
-        if (item.guid === action.payload.guid) {
-          item.starred = !item.starred
-        }
-        return item
-      })
+      if (isContained(action.payload, state.starreds)) {
+        state.starreds = excludeItem(action.payload, state.starreds)
+      } else {
+        state.starreds = [...state.starreds, action.payload]
+      }
     },
   },
 })
 
-export const { append, init, read, star, concat } = itemSlice.actions
+export const { append, init, read, star, concat, readAll } = itemSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectSource = (state: RootState) => state.item.list

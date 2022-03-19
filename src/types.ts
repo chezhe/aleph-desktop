@@ -3,6 +3,12 @@ export enum SourceType {
   PODCAST = 'podcast',
 }
 
+export type Enclosure = {
+  length: string
+  type: string
+  url: string
+}
+
 export interface Source {
   name: string
   url: string
@@ -20,6 +26,8 @@ export interface Digest {
   read?: boolean
   starred?: boolean
   source?: string
+  enclosure?: Enclosure
+  cover?: string
 }
 
 export interface Channel {

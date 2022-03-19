@@ -1,8 +1,9 @@
-import { Box, Grommet, grommet } from 'grommet'
+import { Box, Grommet, grommet, Image } from 'grommet'
 import { useEffect, useState } from 'react'
+import ReactAudioPlayer from 'react-audio-player'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { Digest } from '../types'
-import { fetchSources } from '../utils/network'
+import { fetchPodcast, fetchSources } from '../utils/network'
 import { getValue } from '../utils/storage'
 import ContentList from './ContentList'
 import Reader from './Reader'
@@ -72,6 +73,30 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
           }}
         />
         <Reader activeItem={activeItem} />
+
+        {activeItem && activeItem?.enclosure && activeItem?.enclosure.url && (
+          <Box
+            direction="row"
+            align="center"
+            justify="between"
+            pad={{ right: 'small' }}
+            gap="small"
+            style={{ position: 'fixed', bottom: 0, right: 0 }}
+            background="rgb(240 243 244)"
+            width="calc(100vw - 500px)"
+          >
+            <Image
+              src={activeItem?.cover}
+              height="80px"
+              alt={activeItem?.title}
+            />
+            <ReactAudioPlayer
+              src={activeItem?.enclosure.url}
+              controls
+              style={{ width: '100%' }}
+            />
+          </Box>
+        )}
       </Box>
     </Grommet>
   )

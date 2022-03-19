@@ -4,8 +4,8 @@ import { useAppDispatch } from '../store/hooks'
 import { SourceType } from '../types'
 
 export default function AddSource({ onClose }: { onClose: () => void }) {
-  const [name, setName] = useState('不合时宜')
-  const [url, setURL] = useState('https://feed.xyzfm.space/ww7cqnybekty')
+  const [name, setName] = useState('')
+  const [url, setURL] = useState('')
   const [type, setType] = useState(SourceType.RSS)
   const dispatch = useAppDispatch()
   return (

@@ -2,10 +2,10 @@ import { Box, Button, Heading, Image, Markdown, Text } from 'grommet'
 import { Digest } from '../types'
 import TurndownService from 'turndown'
 import dayjs from 'dayjs'
-import ReactAudioPlayer from 'react-audio-player'
 import NoContent from '../assets/no-content.png'
 import { Archive, Star } from 'grommet-icons'
-import { useAppDispatch } from '../store/hooks'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { isContained } from '../utils/format'
 
 const turndownService = new TurndownService()
 
@@ -15,6 +15,7 @@ export default function Reader({
   activeItem: Digest | undefined
 }) {
   const dispatch = useAppDispatch()
+  const starreds = useAppSelector((state) => state.item.starreds)
 
   if (!activeItem) {
     return (
@@ -32,6 +33,7 @@ export default function Reader({
     )
   }
 
+  const _isStarred = isContained(activeItem, starreds)
   let content = ''
   if (activeItem['content:encoded']) {
     content = activeItem['content:encoded']
@@ -40,7 +42,7 @@ export default function Reader({
   }
   return (
     <Box
-      pad={{ horizontal: '50px' }}
+      pad={{ horizontal: '50px', bottom: '100px' }}
       width="calc(100vw - 500px)"
       height="100vh"
       background="#f3f1eb"
@@ -53,9 +55,9 @@ export default function Reader({
         gap="small"
         border={{ side: 'bottom', size: 'medium', color: 'light-6' }}
       >
-        <Button icon={<Archive />} />
+        {/* <Button icon={<Archive />} /> */}
         <Button
-          icon={<Star color={activeItem.starred ? 'plain' : ''} />}
+          icon={<Star color={_isStarred ? 'plain' : ''} />}
           onClick={() => {
             dispatch({ type: 'item/star', payload: activeItem })
           }}
@@ -67,19 +69,6 @@ export default function Reader({
       <Text size="small" color="dark-6" margin={{ vertical: 'small' }}>
         {dayjs(activeItem?.pubDate).format('YYYY-MM-DD HH:mm')}
       </Text>
-      {activeItem?.guid && activeItem?.guid.endsWith('mp3') && (
-        <Box
-          style={{ position: 'fixed', bottom: 100, right: 0 }}
-          background="rgb(240 243 244)"
-          width="300px"
-        >
-          <ReactAudioPlayer
-            src={activeItem?.guid}
-            controls
-            style={{ width: '100%' }}
-          />
-        </Box>
-      )}
       <Markdown className="markdown-reader">
         {turndownService.turndown(content)}
       </Markdown>

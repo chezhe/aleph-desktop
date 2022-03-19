@@ -9,6 +9,11 @@ interface SourceState {
 const initialState: SourceState = {
   list: [
     {
+      name: '日坛公园',
+      url: 'https://www.ximalaya.com/album/5574153.xml',
+      type: SourceType.PODCAST,
+    },
+    {
       name: '八分',
       url: 'https://api.vistopia.com.cn/rss/program/11.xml',
       type: SourceType.RSS,

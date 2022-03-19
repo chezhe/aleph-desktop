@@ -5,6 +5,8 @@ import TurndownService from 'turndown'
 import { ClearOption } from 'grommet-icons'
 import Launch from '../assets/launch.png'
 import { DOMElement, useEffect, useRef } from 'react'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { isContained } from '../utils/format'
 
 const turndownService = new TurndownService()
 
@@ -19,17 +21,29 @@ export default function ContentList({
   activeItem: Digest | undefined
   setActiveItem: (digest: Digest | undefined) => void
 }) {
+  const dispatch = useAppDispatch()
+  const vieweds = useAppSelector((state) => state.item.vieweds)
   const listContainer = useRef(null)
   const sourceItemList = itemList.filter((t) => t.source === activeSource.name)
+
   useEffect(() => {
     if (listContainer && listContainer.current) {
       ;(listContainer.current as any).scrollTo(0, 0)
     }
   }, [activeSource])
+
+  console.log(sourceItemList)
+
   return (
     <Box width="300px" background="light-1">
       <Box direction="row" height="40px" align="center" justify="end">
-        <Button icon={<ClearOption />} a11yTitle="Read All" />
+        <Button
+          icon={<ClearOption />}
+          a11yTitle="Read All"
+          onClick={() => {
+            dispatch({ type: 'item/readAll', payload: sourceItemList })
+          }}
+        />
       </Box>
 
       {sourceItemList.length === 0 ? (
@@ -64,7 +78,7 @@ export default function ContentList({
                   minHeight: 'unset',
                   cursor: 'pointer',
                   boxShadow: 'none',
-                  opacity: item.read ? 0.7 : 1,
+                  opacity: isContained(item, vieweds) ? 0.7 : 1,
                 }}
                 border={{ side: 'bottom', size: 'xsmall', color: 'light-4' }}
                 background={isActive ? 'neutral-3' : ''}
