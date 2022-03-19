@@ -1,15 +1,15 @@
-import { Digest } from '../types'
+import { Episode } from '../types'
 
-export const isPodcast = (item: Digest) => item.enclosure
+export const isPodcast = (item: Episode) => item.enclosure
 
-export const isContained = (item: Digest, starreds: Digest[]) => {
+export const isContained = (item: Episode, starreds: Episode[]) => {
   if (isPodcast(item)) {
     return !!starreds.find((t) => t.guid === item.guid)
   }
   return !!starreds.find((t) => t.link === item.link)
 }
 
-export const excludeItem = (item: Digest, arr: Digest[]) => {
+export const excludeItem = (item: Episode, arr: Episode[]) => {
   if (isPodcast(item)) {
     return arr.filter((t) => t.guid !== item.guid)
   }

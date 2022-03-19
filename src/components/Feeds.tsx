@@ -1,7 +1,6 @@
 import { Box, Button, Heading, Text } from 'grommet'
 import { SettingsOption } from 'grommet-icons'
-import { useState } from 'react'
-import { Digest, Source } from '../types'
+import { Episode, Source } from '../types'
 
 export default function Feeds({
   sources,
@@ -12,7 +11,7 @@ export default function Feeds({
   sources: Source[]
   active: number
   setActive: (active: number) => void
-  itemList: Digest[]
+  itemList: Episode[]
 }) {
   return (
     <Box>

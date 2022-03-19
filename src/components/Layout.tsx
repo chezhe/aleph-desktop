@@ -2,9 +2,8 @@ import { Box, Grommet, grommet, Image } from 'grommet'
 import { useEffect, useState } from 'react'
 import ReactAudioPlayer from 'react-audio-player'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { Digest } from '../types'
-import { fetchPodcast, fetchSources } from '../utils/network'
-import { getValue } from '../utils/storage'
+import { Episode } from '../types'
+import { fetchSources } from '../utils/network'
 import ContentList from './ContentList'
 import Reader from './Reader'
 import Sidebar from './Sidebar'
@@ -12,7 +11,7 @@ import Sidebar from './Sidebar'
 
 export default function Layout({ children }: { children?: React.ReactNode }) {
   const [active, setActive] = useState(0)
-  const [activeItem, setActiveItem] = useState<Digest | undefined>()
+  const [activeItem, setActiveItem] = useState<Episode | undefined>()
 
   const sourceList = useAppSelector((state) => state.source.list)
   const dispatch = useAppDispatch()

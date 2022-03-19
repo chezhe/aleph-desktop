@@ -15,7 +15,7 @@ export interface Source {
   type: SourceType
 }
 
-export interface Digest {
+export interface Episode {
   author: string
   description: string
   link: string
@@ -37,5 +37,5 @@ export interface Channel {
   managingEditor: string
   pubDate: Date
   title: string
-  item: Digest[]
+  item: Episode[]
 }

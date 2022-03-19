@@ -1,9 +1,9 @@
 import { Box, Button, Heading, Image, Markdown, Text } from 'grommet'
-import { Digest } from '../types'
+import { Episode } from '../types'
 import TurndownService from 'turndown'
 import dayjs from 'dayjs'
 import NoContent from '../assets/no-content.png'
-import { Archive, Star } from 'grommet-icons'
+import { Star } from 'grommet-icons'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { isContained } from '../utils/format'
 
@@ -12,7 +12,7 @@ const turndownService = new TurndownService()
 export default function Reader({
   activeItem,
 }: {
-  activeItem: Digest | undefined
+  activeItem: Episode | undefined
 }) {
   const dispatch = useAppDispatch()
   const starreds = useAppSelector((state) => state.item.starreds)

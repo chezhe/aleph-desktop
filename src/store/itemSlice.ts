@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Digest } from '../types'
+import { Episode } from '../types'
 import type { RootState } from './index'
 import { excludeItem, isContained } from '../utils/format'
 
 interface ItemState {
-  list: Digest[]
-  starreds: Digest[]
-  vieweds: Digest[]
+  list: Episode[]
+  starreds: Episode[]
+  vieweds: Episode[]
 }
 
 const initialState: ItemState = {
@@ -19,22 +19,22 @@ export const itemSlice = createSlice({
   name: 'item',
   initialState,
   reducers: {
-    append: (state, action: PayloadAction<Digest>) => {
+    append: (state, action: PayloadAction<Episode>) => {
       state.list = [...state.list, action.payload]
     },
-    concat: (state, action: PayloadAction<Digest[]>) => {
+    concat: (state, action: PayloadAction<Episode[]>) => {
       state.list = [...state.list, ...action.payload]
     },
-    init: (state, action: PayloadAction<Digest[]>) => {
+    init: (state, action: PayloadAction<Episode[]>) => {
       state.list = action.payload
     },
-    read: (state, action: PayloadAction<Digest>) => {
+    read: (state, action: PayloadAction<Episode>) => {
       state.vieweds = [...state.vieweds, action.payload]
     },
-    readAll: (state, action: PayloadAction<Digest[]>) => {
+    readAll: (state, action: PayloadAction<Episode[]>) => {
       state.vieweds = [...state.vieweds, ...action.payload]
     },
-    star: (state, action: PayloadAction<Digest>) => {
+    star: (state, action: PayloadAction<Episode>) => {
       if (isContained(action.payload, state.starreds)) {
         state.starreds = excludeItem(action.payload, state.starreds)
       } else {

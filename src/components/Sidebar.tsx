@@ -1,7 +1,7 @@
 import { Box, Button } from 'grommet'
 import { Add, Search } from 'grommet-icons'
 import { useState } from 'react'
-import { Digest, Source } from '../types'
+import { Episode, Source } from '../types'
 import AddSource from './AddSource'
 import Feeds from './Feeds'
 import Folders from './Folders'
@@ -16,7 +16,7 @@ export default function SourceList({
   sources: Source[]
   active: number
   setActive: (active: number) => void
-  itemList: Digest[]
+  itemList: Episode[]
 }) {
   const [visible, setVisible] = useState(false)
   return (

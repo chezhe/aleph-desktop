@@ -1,5 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
-import { Digest, Source } from '../types'
+import { Source } from '../types'
 
 let fetching = false
 
@@ -45,5 +45,3 @@ function formatItem(item: any) {
   }
   return newItem
 }
-
-export async function fetchPodcast(source: Source) {}

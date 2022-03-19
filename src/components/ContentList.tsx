@@ -1,10 +1,10 @@
 import dayjs from 'dayjs'
 import { Box, Button, Markdown, Text, Image } from 'grommet'
-import { Digest, Source } from '../types'
+import { Episode, Source } from '../types'
 import TurndownService from 'turndown'
 import { ClearOption } from 'grommet-icons'
 import Launch from '../assets/launch.png'
-import { DOMElement, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { isContained } from '../utils/format'
 
@@ -16,10 +16,10 @@ export default function ContentList({
   activeItem,
   setActiveItem,
 }: {
-  itemList: Digest[]
+  itemList: Episode[]
   activeSource: Source
-  activeItem: Digest | undefined
-  setActiveItem: (digest: Digest | undefined) => void
+  activeItem: Episode | undefined
+  setActiveItem: (digest: Episode | undefined) => void
 }) {
   const dispatch = useAppDispatch()
   const vieweds = useAppSelector((state) => state.item.vieweds)
