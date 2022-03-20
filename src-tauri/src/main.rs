@@ -11,10 +11,11 @@ fn main() {
   let ctx = tauri::generate_context!();
 
   let profile = StoreBuilder::new(".profile".parse().unwrap())
+    .default("itemstarreds".to_string(), "[]".into())
     .build();
 
   tauri::Builder::default()
-    .plugin(PluginBuilder::default().stores([profile]).build())
+    .plugin(PluginBuilder::default().stores([profile]).freeze().build())
     .menu(Menu::with_items([
       #[cfg(target_os = "macos")]
       MenuEntry::Submenu(Submenu::new(

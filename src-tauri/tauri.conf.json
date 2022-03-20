@@ -36,7 +36,7 @@
         "frameworks": [],
         "minimumSystemVersion": "",
         "useBootstrapper": false,
-        "exceptionDomain": "",
+        "exceptionDomain": "*",
         "signingIdentity": null,
         "providerShortName": null,
         "entitlements": null

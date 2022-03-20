@@ -1,3 +1,4 @@
+import parse from 'url-parse'
 import { Episode } from '../types'
 
 export const isPodcast = (item: Episode) => item.enclosure
@@ -16,6 +17,16 @@ export const excludeItem = (item: Episode, arr: Episode[]) => {
     return arr.filter((t) => t.guid !== item.guid)
   }
   return arr.filter((t) => t.link !== item.link)
+}
+
+export const stripURL = (url: string) => {
+  if (url.includes('jt.ximalaya.com')) {
+    const parsed = parse(url, true)
+    if (parsed.query && parsed.query.jt) {
+      return parsed.query.jt
+    }
+  }
+  return url
 }
 
 // export const diffConcat = (a: Episode[], b: Episode[]) => {

@@ -1,11 +1,12 @@
-import { Box, Grommet, grommet, Image } from 'grommet'
+import { Box, dark, Grommet, grommet, Main } from 'grommet'
 import { useEffect, useState } from 'react'
-import ReactAudioPlayer from 'react-audio-player'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { Episode } from '../types'
 import { fetchFeed } from '../utils/network'
 import { getValue } from '../utils/storage'
 import ContentList from './ContentList'
+import Playing from './Playing'
+import PodPlayer from './PodPlayer'
 import Reader from './Reader'
 import Sidebar from './Sidebar'
 // import TitleBar from './TitleBar'
@@ -14,6 +15,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   const [activeSource, setActiveSource] = useState('')
   const [episodes, setEpisodes] = useState<Episode[]>([])
   const [activeItem, setActiveItem] = useState<Episode | undefined>()
+  const [playingEp, setPlayingEp] = useState<Episode | undefined>()
 
   const sourceList = useAppSelector((state) => state.source.list)
   const dispatch = useAppDispatch()
@@ -73,51 +75,37 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   }, [])
 
   return (
-    <Grommet theme={grommet} themeMode="dark">
+    <Grommet theme={grommet} themeMode="light" full>
       {/* <TitleBar /> */}
-      <Box direction="row" width="100%">
-        <Sidebar
-          sources={sourceList}
-          itemList={itemList}
-          activeSource={activeSource}
-          setEpisodes={setEpisodes}
-          setActiveSource={setActiveSource}
-        />
-        <ContentList
-          activeSource={activeSource}
-          episodes={episodes}
-          activeItem={activeItem}
-          setActiveItem={(item) => {
-            setActiveItem(item)
-            dispatch({ type: 'item/read', payload: item })
-          }}
-        />
-        <Reader activeItem={activeItem} />
+      <Main>
+        <Box direction="row" width="100%">
+          <Sidebar
+            sources={sourceList}
+            itemList={itemList}
+            activeSource={activeSource}
+            setEpisodes={setEpisodes}
+            setActiveSource={setActiveSource}
+          />
+          <ContentList
+            activeSource={activeSource}
+            episodes={episodes}
+            activeItem={activeItem}
+            setActiveItem={(item) => {
+              setActiveItem(item)
+              dispatch({ type: 'item/read', payload: item })
+            }}
+          />
+          <Reader activeItem={activeItem} />
 
-        {activeItem && activeItem?.enclosure && activeItem?.enclosure.url && (
-          <Box
-            direction="row"
-            align="center"
-            justify="between"
-            pad={{ right: 'small' }}
-            gap="small"
-            style={{ position: 'fixed', bottom: 0, right: 0 }}
-            background="light-5"
-            width="calc(100vw - 500px)"
-          >
-            <Image
-              src={activeItem?.cover}
-              height="80px"
-              alt={activeItem?.title}
-            />
-            <ReactAudioPlayer
-              src={activeItem?.enclosure.url}
-              controls
-              style={{ width: '100%' }}
-            />
-          </Box>
-        )}
-      </Box>
+          <PodPlayer activeItem={activeItem} setPlayingEp={setPlayingEp} />
+
+          <Playing
+            activeItem={activeItem}
+            playingEp={playingEp}
+            setPlayingEp={setPlayingEp}
+          />
+        </Box>
+      </Main>
     </Grommet>
   )
 }
