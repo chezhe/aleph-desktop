@@ -20,13 +20,17 @@ export const excludeItem = (item: Episode, arr: Episode[]) => {
 }
 
 export const stripURL = (url: string) => {
+  let result = url
   if (url.includes('jt.ximalaya.com')) {
     const parsed = parse(url, true)
     if (parsed.query && parsed.query.jt) {
-      return parsed.query.jt
+      result = parsed.query.jt
     }
   }
-  return url
+  if (result.startsWith('http://')) {
+    return result.replace('http://', 'https://')
+  }
+  return result
 }
 
 // export const diffConcat = (a: Episode[], b: Episode[]) => {

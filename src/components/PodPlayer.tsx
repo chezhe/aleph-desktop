@@ -25,7 +25,11 @@ export default function PodPlayer({
       background="light-5"
       width="calc(100vw - 500px)"
     >
-      <Image src={activeItem?.cover} height="80px" alt={activeItem?.title} />
+      <Image
+        src={stripURL(activeItem?.cover || '')}
+        height="80px"
+        alt={activeItem?.title}
+      />
       <ReactAudioPlayer
         src={stripURL(activeItem.enclosure.url)}
         controls

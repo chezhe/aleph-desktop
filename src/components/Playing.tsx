@@ -1,7 +1,9 @@
+import { strictEqual } from 'assert'
 import { Box, Button, Image } from 'grommet'
 import { Close } from 'grommet-icons'
 import ReactAudioPlayer from 'react-audio-player'
 import { Episode } from '../types'
+import { stripURL } from '../utils/format'
 
 export default function Playing({
   activeItem,
@@ -39,14 +41,14 @@ export default function Playing({
         />
       </Box>
       <Image
-        src={playingEp?.cover}
+        src={stripURL(playingEp?.cover || '')}
         width="80px"
         height="80px"
         alt={playingEp?.title}
       />
 
       <ReactAudioPlayer
-        src={playingEp!.enclosure!.url}
+        src={stripURL(playingEp!.enclosure!.url)}
         controls
         autoPlay
         style={{ width: '100%', visibility: 'hidden' }}
