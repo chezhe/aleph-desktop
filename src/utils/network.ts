@@ -52,15 +52,17 @@ export function formatEpisode(item: any, feed: Feed) {
       cover: newItem['itunes:image']['@_href'],
     }
   }
+  const guid =
+    typeof newItem.guid === 'string' ? newItem.guid : newItem.guid['#text']
   newItem = {
-    link: newItem.link,
+    link: newItem.link || guid,
     author: newItem.author || newItem['itunes:author'] || '',
     pubDate: newItem.pubDate || '',
     cover: newItem.cover || '',
     podurl: newItem.enclosure?.url || '',
     title: newItem.title || '',
     description: newItem.description || newItem['content:encoded'] || '',
-    guid: newItem.guid || '',
+    guid: guid || '',
     feedid: feed.id,
     readed: false,
     starred: false,

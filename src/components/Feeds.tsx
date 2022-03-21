@@ -53,7 +53,17 @@ export default function Feeds({
             }}
             style={{ boxShadow: 'none', borderRadius: 4, minHeight: 'unset' }}
           >
-            <Text size="small">{feed.name}</Text>
+            <Text
+              size="small"
+              style={{
+                maxWidth: 100,
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {feed.name}
+            </Text>
             <Box background="">
               <Text size="small" color="neutral-3" weight="bold">
                 {

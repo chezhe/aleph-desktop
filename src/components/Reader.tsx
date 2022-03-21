@@ -72,11 +72,13 @@ export default function Reader({
               gap="small"
               border={{ side: 'bottom', size: 'medium', color: 'light-6' }}
             >
-              <Button
-                icon={<Compass />}
-                href={activeItem.link}
-                target="_blank"
-              />
+              {activeItem.link.startsWith('https://') && (
+                <Button
+                  icon={<Compass />}
+                  href={activeItem.link}
+                  target="_blank"
+                />
+              )}
               <Button
                 icon={<Star color={isStarred ? 'plain' : ''} />}
                 onClick={() => {
