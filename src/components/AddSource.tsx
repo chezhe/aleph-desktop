@@ -1,12 +1,15 @@
+import { sendNotification } from '@tauri-apps/api/notification'
 import { Box, Button, Layer, Text, TextInput, RadioButtonGroup } from 'grommet'
 import { useState } from 'react'
 import { useAppDispatch } from '../store/hooks'
 import { SourceType } from '../types'
+import { fetchFeed } from '../utils/network'
+import { createFeed } from '../utils/storage'
 
 export default function AddSource({ onClose }: { onClose: () => void }) {
   const [name, setName] = useState('')
   const [url, setURL] = useState('')
-  const [type, setType] = useState(SourceType.PODCAST)
+  const [type, setType] = useState(SourceType.RSS)
   const dispatch = useAppDispatch()
   return (
     <Layer>
@@ -54,16 +57,28 @@ export default function AddSource({ onClose }: { onClose: () => void }) {
             label="Confirm"
             primary
             style={{ borderRadius: 0 }}
-            onClick={() => {
-              dispatch({
-                type: 'source/append',
-                payload: {
+            onClick={async () => {
+              try {
+                const _feed = {
                   name,
                   url,
                   type,
-                },
-              })
-              onClose()
+                }
+                const newFeed = await createFeed(_feed)
+
+                dispatch({
+                  type: 'source/append',
+                  payload: newFeed,
+                })
+                const episodes = await fetchFeed(newFeed)
+                dispatch({
+                  type: 'item/concat',
+                  payload: episodes,
+                })
+                onClose()
+              } catch (error: any) {
+                sendNotification(error?.message)
+              }
             }}
           />
         </Box>

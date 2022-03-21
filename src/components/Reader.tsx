@@ -12,8 +12,8 @@ import TurndownService from 'turndown'
 import dayjs from 'dayjs'
 import NoContent from '../assets/no-content.png'
 import { Star } from 'grommet-icons'
-import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { isContained } from '../utils/format'
+import { useAppDispatch } from '../store/hooks'
+import { useState } from 'react'
 
 const turndownService = new TurndownService()
 
@@ -23,7 +23,7 @@ export default function Reader({
   activeItem: Episode | undefined
 }) {
   const dispatch = useAppDispatch()
-  const starreds = useAppSelector((state) => state.item.starreds)
+  const [isStarred, setIsStarred] = useState(activeItem?.starred ?? false)
 
   if (!activeItem) {
     return (
@@ -41,13 +41,7 @@ export default function Reader({
     )
   }
 
-  const _isStarred = isContained(activeItem, starreds)
-  let content = ''
-  if (activeItem['content:encoded']) {
-    content = activeItem['content:encoded']
-  } else {
-    content = activeItem?.description || ''
-  }
+  let content = activeItem.description
   return (
     <ThemeContext.Consumer>
       {(theme: any) => {
@@ -69,9 +63,13 @@ export default function Reader({
             >
               {/* <Button icon={<Archive />} /> */}
               <Button
-                icon={<Star color={_isStarred ? 'plain' : ''} />}
+                icon={<Star color={isStarred ? 'plain' : ''} />}
                 onClick={() => {
-                  dispatch({ type: 'item/star', payload: activeItem })
+                  dispatch({
+                    type: 'item/star',
+                    payload: { ...activeItem, starred: isStarred },
+                  })
+                  setIsStarred(!isStarred)
                 }}
               />
             </Box>

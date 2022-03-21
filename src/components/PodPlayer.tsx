@@ -10,7 +10,7 @@ export default function PodPlayer({
   activeItem: Episode | undefined
   setPlayingEp: (ep: Episode | undefined) => void
 }) {
-  if (!activeItem || !activeItem.enclosure || !activeItem.enclosure.url) {
+  if (!activeItem || !activeItem.podurl) {
     return null
   }
 
@@ -31,7 +31,7 @@ export default function PodPlayer({
         alt={activeItem?.title}
       />
       <ReactAudioPlayer
-        src={stripURL(activeItem.enclosure.url)}
+        src={stripURL(activeItem.podurl)}
         controls
         style={{ width: '100%' }}
         onPlay={() => {

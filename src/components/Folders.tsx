@@ -1,18 +1,18 @@
 import { Box, Heading, Text } from 'grommet'
 import { Star } from 'grommet-icons'
 import { useAppSelector } from '../store/hooks'
-import { Episode } from '../types'
+import { Source, SourceType } from '../types'
 
 export default function Folders({
   activeSource,
-  setEpisodes,
   setActiveSource,
 }: {
-  activeSource: string
-  setEpisodes: (episodes: Episode[]) => void
-  setActiveSource: (source: string) => void
+  activeSource: Source | undefined
+  setActiveSource: (source: Source) => void
 }) {
-  const starreds = useAppSelector((state) => state.item.starreds)
+  const starreds = useAppSelector((state) =>
+    state.item.list.filter((t) => t.starred)
+  )
   return (
     <Box margin={{ vertical: 'medium' }}>
       <Box>
@@ -27,11 +27,15 @@ export default function Folders({
           justify="between"
           gap="xsmall"
           pad="xxsmall"
-          background={activeSource === 'Starred' ? 'light-6' : ''}
+          background={activeSource?.id === 'Starred' ? 'light-6' : ''}
           style={{ boxShadow: 'none', borderRadius: 4, minHeight: 'unset' }}
           onClick={() => {
-            setEpisodes(starreds)
-            setActiveSource('Starred')
+            setActiveSource({
+              id: 'starred',
+              name: 'Starred',
+              url: '',
+              type: SourceType.RSS,
+            })
           }}
         >
           <Box direction="row" align="center" justify="between" gap="xsmall">

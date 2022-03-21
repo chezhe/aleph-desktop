@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Source } from '../types'
 import type { RootState } from './index'
-import { setValue } from '../utils/storage'
 import { EXAMPLE_FEEDS } from './constants'
+import { removeFeed } from '../utils/storage'
 
 interface SourceState {
   list: Source[]
@@ -19,17 +19,15 @@ export const sourceSlice = createSlice({
   reducers: {
     append: (state, action: PayloadAction<Source>) => {
       state.list = [...state.list, action.payload]
-      setValue('source', JSON.stringify(state.list))
     },
     init: (state, action: PayloadAction<Source[]>) => {
       state.list = action.payload
-      setValue('source', JSON.stringify(state.list))
     },
     remove: (state, action: PayloadAction<Source>) => {
       state.list = state.list.filter(
         (source) => source.name !== action.payload.name
       )
-      setValue('source', JSON.stringify(state.list))
+      removeFeed(action.payload)
     },
   },
 })

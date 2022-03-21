@@ -1,7 +1,7 @@
 import parse from 'url-parse'
 import { Episode } from '../types'
 
-export const isPodcast = (item: Episode) => item.enclosure
+export const isPodcast = (item: Episode) => item.podurl
 
 export const isContained = (item: Episode, starreds: Episode[]) => {
   if (isPodcast(item)) {

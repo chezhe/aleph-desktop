@@ -24,10 +24,11 @@
     "react-redux": "^7.2.6",
     "react-scripts": "5.0.0",
     "styled-components": "^5.3.3",
-    "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#cf6c28d50446d480379e1af22aad1ea22b0d887f",
+    "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql#2be17fae3832e55a18c0beaf7b76f341e7a755da",
     "turndown": "^7.1.1",
     "typescript": "^4.4.2",
     "url-parse": "^1.5.10",
+    "uuid": "^8.3.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
@@ -60,6 +61,7 @@
     "@types/lodash": "^4.14.180",
     "@types/styled-components": "^5.1.24",
     "@types/turndown": "^5.0.1",
-    "@types/url-parse": "^1.4.8"
+    "@types/url-parse": "^1.4.8",
+    "@types/uuid": "^8.3.4"
   }
 }

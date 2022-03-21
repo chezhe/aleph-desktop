@@ -16,9 +16,7 @@ export default function Playing({
 }) {
   if (
     !playingEp ||
-    (playingEp &&
-      activeItem &&
-      activeItem?.enclosure?.url === playingEp?.enclosure?.url)
+    (playingEp && activeItem && activeItem?.podurl === playingEp?.podurl)
   ) {
     return null
   }
@@ -48,7 +46,7 @@ export default function Playing({
       />
 
       <ReactAudioPlayer
-        src={stripURL(playingEp!.enclosure!.url)}
+        src={stripURL(playingEp!.podurl)}
         controls
         autoPlay
         style={{ width: '100%', visibility: 'hidden' }}

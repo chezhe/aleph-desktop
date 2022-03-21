@@ -1,10 +1,10 @@
 import { Box, dark, Grommet, grommet, Main } from 'grommet'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { Episode } from '../types'
+import { Episode, Source } from '../types'
 import { fetchFeed } from '../utils/network'
-import { getValue } from '../utils/storage'
-import ContentList from './ContentList'
+import { allEpisodes, allFeeds } from '../utils/storage'
+import EpisodeList from './EpisodeList'
 import Playing from './Playing'
 import PodPlayer from './PodPlayer'
 import Reader from './Reader'
@@ -12,8 +12,7 @@ import Sidebar from './Sidebar'
 // import TitleBar from './TitleBar'
 
 export default function Layout({ children }: { children?: React.ReactNode }) {
-  const [activeSource, setActiveSource] = useState('')
-  const [episodes, setEpisodes] = useState<Episode[]>([])
+  const [activeSource, setActiveSource] = useState<Source | undefined>()
   const [activeItem, setActiveItem] = useState<Episode | undefined>()
   const [playingEp, setPlayingEp] = useState<Episode | undefined>()
 
@@ -23,56 +22,42 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   const itemList = useAppSelector((state) => state.item.list)
 
   useEffect(() => {
-    getValue('source')
-      .then((result: any) => {
-        console.log('###', result)
-        if (result?.value) {
-          dispatch({
-            type: 'source/init',
-            payload: JSON.parse(result.value),
-          })
-        }
-      })
-      .catch(console.log)
-
-    getValue('itemstarreds')
-      .then((result: any) => {
-        if (result?.value) {
-          dispatch({
-            type: 'item/starAll',
-            payload: JSON.parse(result.value),
-          })
-        }
-      })
-      .catch(console.log)
-
-    // getValue('itemvieweds')
-    //   .then((result: any) => {
-    //     if (result?.value) {
-    //       dispatch({
-    //         type: 'item/readAll',
-    //         payload: JSON.parse(result.value),
-    //       })
-    //     }
-    //   })
-    //   .catch(console.log)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    for (let index = 0; index < sourceList.length; index++) {
-      fetchFeed(sourceList[index]).then((items) => {
+    allFeeds()
+      .then((feeds: Source[]) => {
         dispatch({
-          type: 'item/concat',
-          payload: items.map((item) => ({
-            ...item,
-            source: sourceList[index].name,
-          })),
+          type: 'source/init',
+          payload: feeds,
+        })
+
+        allEpisodes().then((episodes: Episode[]) => {
+          dispatch({
+            type: 'item/init',
+            payload: episodes,
+          })
+
+          feeds.forEach((feed) => {
+            fetchFeed(feed).then((episodes) => {
+              dispatch({
+                type: 'item/concat',
+                payload: episodes,
+              })
+            })
+          })
         })
       })
-    }
+      .catch(console.log)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const episodes = itemList.filter((item) => {
+    if (activeSource) {
+      if (activeSource.id === 'starred') {
+        return item.starred
+      }
+      return item.feedid === activeSource.id
+    }
+    return false
+  })
 
   return (
     <Grommet theme={grommet} themeMode="light" full>
@@ -83,10 +68,9 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
             sources={sourceList}
             itemList={itemList}
             activeSource={activeSource}
-            setEpisodes={setEpisodes}
             setActiveSource={setActiveSource}
           />
-          <ContentList
+          <EpisodeList
             activeSource={activeSource}
             episodes={episodes}
             activeItem={activeItem}

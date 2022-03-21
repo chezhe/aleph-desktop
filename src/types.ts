@@ -8,31 +8,25 @@ export enum SourceType {
   PODCAST = 'podcast',
 }
 
-export type Enclosure = {
-  length: string
-  type: string
-  url: string
-}
-
 export interface Source {
+  id?: string
   name: string
   url: string
   type: SourceType
 }
 
 export interface Episode {
-  author: string
-  description: string
   link: string
+  author: string
   pubDate: string
   title: string
-  guid?: string
-  'content:encoded'?: string
-  read?: boolean
-  starred?: boolean
-  source?: string
-  enclosure?: Enclosure
-  cover?: string
+  description: string
+  podurl: string
+  guid: string
+  readed: boolean
+  starred: boolean
+  feedid: string
+  cover: string
 }
 
 export interface Channel {

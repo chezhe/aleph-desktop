@@ -2067,6 +2067,11 @@
   resolved "https://registry.npmjs.org/@types/url-parse/-/url-parse-1.4.8.tgz#c3825047efbca1295b7f1646f38203d9145130d6"
   integrity sha512-zqqcGKyNWgTLFBxmaexGUKQyWqeG7HjXj20EuQJSJWwXe54BjX0ihIo5cJB9yAQzH8dNugJ9GvkBYMjPXs/PJw==
 
+"@types/uuid@^8.3.4":
+  version "8.3.4"
+  resolved "https://registry.npmjs.org/@types/uuid/-/uuid-8.3.4.tgz#bd86a43617df0594787d38b735f55c805becf1bc"
+  integrity sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==
+
 "@types/ws@^8.2.2":
   version "8.5.3"
   resolved "https://registry.npmjs.org/@types/ws/-/ws-8.5.3.tgz#7d25a1ffbecd3c4f2d35068d0b283c037003274d"
@@ -8251,9 +8256,9 @@ tapable@^2.0.0, tapable@^2.1.1, tapable@^2.2.0:
   resolved "https://registry.npmjs.org/tapable/-/tapable-2.2.1.tgz#1967a73ef4060a82f12ab96af86d52fdb76eeca0"
   integrity sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==
 
-"tauri-plugin-store-api@github:tauri-apps/tauri-plugin-store#cf6c28d50446d480379e1af22aad1ea22b0d887f":
-  version "0.1.0"
-  resolved "https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/cf6c28d50446d480379e1af22aad1ea22b0d887f"
+"tauri-plugin-sql-api@github:tauri-apps/tauri-plugin-sql#2be17fae3832e55a18c0beaf7b76f341e7a755da":
+  version "0.1.1"
+  resolved "https://codeload.github.com/tauri-apps/tauri-plugin-sql/tar.gz/2be17fae3832e55a18c0beaf7b76f341e7a755da"
   dependencies:
     "@tauri-apps/api" "1.0.0-rc.1"
     tslib "2.3.1"

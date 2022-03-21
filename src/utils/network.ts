@@ -24,7 +24,12 @@ export async function fetchFeed(source: Source): Promise<Source[]> {
         ignoreAttributes: false,
       })
       const jObj = parser.parse(data as string)
-      return jObj.rss?.channel.item.map(formatItem)
+      console.log(source, jObj)
+      return (
+        jObj.rss?.channel?.item.map((item: any) =>
+          formatEpisode(item, source)
+        ) || []
+      )
     })
     .catch((err) => {
       console.log(err)
@@ -32,7 +37,7 @@ export async function fetchFeed(source: Source): Promise<Source[]> {
     })
 }
 
-export function formatItem(item: any) {
+export function formatEpisode(item: any, source: Source) {
   let newItem = item
   if (item.enclosure) {
     newItem = {
@@ -49,6 +54,19 @@ export function formatItem(item: any) {
       ...newItem,
       cover: newItem['itunes:image']['@_href'],
     }
+  }
+  newItem = {
+    link: newItem.link,
+    author: newItem.author || newItem['itunes:author'] || '',
+    pubDate: newItem.pubDate || '',
+    cover: newItem.cover || '',
+    podurl: newItem.enclosure?.url || '',
+    title: newItem.title || '',
+    description: newItem.description || newItem['content:encoded'] || '',
+    guid: newItem.guid || '',
+    feedid: source.id,
+    readed: false,
+    starred: false,
   }
   return newItem
 }

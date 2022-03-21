@@ -3,19 +3,28 @@
   windows_subsystem = "windows"
 )]
 
-use tauri_plugin_store::{PluginBuilder, StoreBuilder};
+use tauri_plugin_sql::{Migration, MigrationKind, TauriSql};
 use tauri::{Menu, MenuItem, Submenu, CustomMenuItem, MenuEntry, Manager};
 use tauri::api::{shell};
 
 fn main() {
   let ctx = tauri::generate_context!();
 
-  let profile = StoreBuilder::new(".profile".parse().unwrap())
-    .default("itemstarreds".to_string(), "[]".into())
-    .build();
-
   tauri::Builder::default()
-    .plugin(PluginBuilder::default().stores([profile]).freeze().build())
+    .plugin(TauriSql::default().add_migrations(
+      "sqlite:test6.db",
+      vec![Migration {
+        version: 1,
+        description: "create feeds",
+        sql: include_str!("./migrations/feeds.sql"),
+        kind: MigrationKind::Up,
+      }, Migration {
+        version: 1,
+        description: "create episodes",
+        sql: include_str!("./migrations/episodes.sql"),
+        kind: MigrationKind::Up,
+      }],
+    ))
     .menu(Menu::with_items([
       #[cfg(target_os = "macos")]
       MenuEntry::Submenu(Submenu::new(

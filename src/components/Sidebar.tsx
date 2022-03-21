@@ -11,14 +11,12 @@ export default function SourceList({
   sources,
   activeSource,
   itemList,
-  setEpisodes,
   setActiveSource,
 }: {
   sources: Source[]
-  activeSource: string
+  activeSource: Source | undefined
   itemList: Episode[]
-  setEpisodes: (episodes: Episode[]) => void
-  setActiveSource: (source: string) => void
+  setActiveSource: (source: Source) => void
 }) {
   const [visible, setVisible] = useState(false)
 
@@ -47,14 +45,12 @@ export default function SourceList({
               </Box>
               <Folders
                 activeSource={activeSource}
-                setEpisodes={setEpisodes}
                 setActiveSource={setActiveSource}
               />
               <Feeds
                 sources={sources}
                 itemList={itemList}
                 activeSource={activeSource}
-                setEpisodes={setEpisodes}
                 setActiveSource={setActiveSource}
               />
             </Box>

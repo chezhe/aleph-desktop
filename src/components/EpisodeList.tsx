@@ -1,13 +1,12 @@
 import dayjs from 'dayjs'
 import { Box, Button, Markdown, Text, Image, ThemeContext } from 'grommet'
-import { Episode } from '../types'
+import { Episode, Source } from '../types'
 import TurndownService from 'turndown'
 import { Ascend, Descend, Checkmark } from 'grommet-icons'
 import Launch from '../assets/launch.png'
 import { useEffect, useRef, useState } from 'react'
 import _ from 'lodash'
-import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { getEpisodeId } from '../utils/format'
+import { useAppDispatch } from '../store/hooks'
 import { PAGE_SIZE } from '../store/constants'
 
 const turndownService = new TurndownService()
@@ -19,14 +18,13 @@ export default function ContentList({
   setActiveItem,
 }: {
   episodes: Episode[]
-  activeSource: string
+  activeSource: Source | undefined
   activeItem: Episode | undefined
   setActiveItem: (digest: Episode | undefined) => void
 }) {
   const [page, setPage] = useState(1)
   const [isAscend, setIsAscend] = useState(true)
   const dispatch = useAppDispatch()
-  const vieweds = useAppSelector((state) => state.item.vieweds)
   const listContainer = useRef(null)
 
   useEffect(() => {
@@ -35,11 +33,11 @@ export default function ContentList({
     }
   }, [activeSource, isAscend])
 
-  console.log(episodes)
   let _eposides = _.sortBy(episodes, [(t) => dayjs(t.pubDate).unix()])
   if (isAscend) {
     _eposides = _.reverse(_eposides)
   }
+
   return (
     <ThemeContext.Consumer>
       {(theme: any) => {
@@ -73,7 +71,7 @@ export default function ContentList({
                   icon={<Checkmark />}
                   a11yTitle="Read All"
                   onClick={() => {
-                    dispatch({ type: 'item/readAll', payload: episodes })
+                    dispatch({ type: 'item/readAll', payload: activeSource })
                   }}
                 />
               </Box>
@@ -113,7 +111,7 @@ export default function ContentList({
                         minHeight: 'unset',
                         cursor: 'pointer',
                         boxShadow: 'none',
-                        opacity: vieweds.includes(getEpisodeId(item)) ? 0.7 : 1,
+                        opacity: item.readed ? 0.7 : 1,
                       }}
                       border={{
                         side: 'bottom',

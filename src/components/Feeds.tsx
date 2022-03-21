@@ -1,26 +1,21 @@
 import { Box, Button, Heading, Text } from 'grommet'
 import { SettingsOption } from 'grommet-icons'
 import { useState } from 'react'
-import { useAppSelector } from '../store/hooks'
 import { Episode, Source } from '../types'
-import { getEpisodeId } from '../utils/format'
 import ManageFeed from './ManageFeed'
 
 export default function Feeds({
   sources,
   activeSource,
   itemList,
-  setEpisodes,
   setActiveSource,
 }: {
   sources: Source[]
-  activeSource: string
+  activeSource: Source | undefined
   itemList: Episode[]
-  setEpisodes: (episodes: Episode[]) => void
-  setActiveSource: (source: string) => void
+  setActiveSource: (source: Source) => void
 }) {
   const [visible, setVisible] = useState(false)
-  const vieweds = useAppSelector((state) => state.item.vieweds)
 
   return (
     <Box>
@@ -52,10 +47,9 @@ export default function Feeds({
             direction="row"
             align="center"
             justify="between"
-            background={activeSource === source.name ? 'light-6' : ''}
+            background={activeSource?.id === source.id ? 'light-6' : ''}
             onClick={() => {
-              setEpisodes(itemList.filter((t) => t.source === source.name))
-              setActiveSource(source.name)
+              setActiveSource(source)
             }}
             style={{ boxShadow: 'none', borderRadius: 4, minHeight: 'unset' }}
           >
@@ -63,11 +57,8 @@ export default function Feeds({
             <Box background="">
               <Text size="small" color="neutral-3" weight="bold">
                 {
-                  itemList.filter(
-                    (t) =>
-                      t.source === source.name &&
-                      !vieweds.includes(getEpisodeId(t))
-                  ).length
+                  itemList.filter((t) => t.feedid === source.id && !t.readed)
+                    .length
                 }
               </Text>
             </Box>
