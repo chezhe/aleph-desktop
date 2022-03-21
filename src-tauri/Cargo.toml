@@ -1,11 +1,11 @@
 [package]
-name = "Aleph"
+name = "aleph"
 version = "0.1.0"
 description = "A Tauri App"
 authors = ["chezhe"]
 license = ""
 repository = ""
-default-run = "Aleph"
+default-run = "aleph"
 edition = "2021"
 rust-version = "1.57"
 
