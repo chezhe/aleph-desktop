@@ -1,5 +1,13 @@
 import dayjs from 'dayjs'
-import { Box, Button, Markdown, Text, Image, ThemeContext } from 'grommet'
+import {
+  Box,
+  Button,
+  Markdown,
+  Text,
+  Image,
+  ThemeContext,
+  Anchor,
+} from 'grommet'
 import { Episode, Source } from '../types'
 import TurndownService from 'turndown'
 import { Ascend, Descend, Checkmark } from 'grommet-icons'
@@ -10,6 +18,16 @@ import { useAppDispatch } from '../store/hooks'
 import { PAGE_SIZE } from '../store/constants'
 
 const turndownService = new TurndownService()
+
+function MarkAnchor(props: any) {
+  let label = props.title
+  if (!label) {
+    if (props.children && typeof props.children[0] === 'string') {
+      label = props.children[0]
+    }
+  }
+  return <Anchor label={label} />
+}
 
 export default function ContentList({
   episodes,
@@ -127,7 +145,12 @@ export default function ContentList({
                       <Text size="xsmall" color="dark-6">
                         {dayjs(item.pubDate).format('YYYY-MM-DD HH:mm')}
                       </Text>
-                      <Markdown className="markdown-digest">{digest}</Markdown>
+                      <Markdown
+                        className="markdown-digest"
+                        components={{ a: MarkAnchor }}
+                      >
+                        {digest}
+                      </Markdown>
                     </Box>
                   )
                 })}
