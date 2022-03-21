@@ -51,7 +51,6 @@ export const itemSlice = createSlice({
         }
         return t
       })
-      console.log(action.payload)
       readEpisodeByFeedId(action.payload)
     },
     star: (state, action: PayloadAction<Episode>) => {

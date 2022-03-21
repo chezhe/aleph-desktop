@@ -24,7 +24,6 @@ export async function fetchFeed(source: Source): Promise<Source[]> {
         ignoreAttributes: false,
       })
       const jObj = parser.parse(data as string)
-      console.log(source, jObj)
       return (
         jObj.rss?.channel?.item.map((item: any) =>
           formatEpisode(item, source)
@@ -32,7 +31,6 @@ export async function fetchFeed(source: Source): Promise<Source[]> {
       )
     })
     .catch((err) => {
-      console.log(err)
       return []
     })
 }
