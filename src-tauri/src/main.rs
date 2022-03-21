@@ -8,7 +8,7 @@ use tauri::{Menu, MenuItem, Submenu, CustomMenuItem, MenuEntry, Manager};
 use tauri::api::{shell};
 
 fn main() {
-  let ctx = tauri::generate_context!();
+  let _ctx = tauri::generate_context!();
 
   tauri::Builder::default()
     .plugin(TauriSql::default().add_migrations(
@@ -28,9 +28,9 @@ fn main() {
     .menu(Menu::with_items([
       #[cfg(target_os = "macos")]
       MenuEntry::Submenu(Submenu::new(
-        &ctx.package_info().name,
+        &_ctx.package_info().name,
         Menu::with_items([
-          MenuItem::About(ctx.package_info().name.clone()).into(),
+          MenuItem::About(_ctx.package_info().name.clone()).into(),
           MenuItem::Separator.into(),
           MenuItem::Services.into(),
           MenuItem::Separator.into(),
