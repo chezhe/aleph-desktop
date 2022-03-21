@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Episode, Source } from '../types'
+import { Episode, Feed } from '../types'
 import type { RootState } from './index'
 import _ from 'lodash'
 import {
@@ -9,16 +9,16 @@ import {
   readEpisodeByFeedId,
 } from '../utils/storage'
 
-interface ItemState {
+interface EpisodeState {
   list: Episode[]
 }
 
-const initialState: ItemState = {
+const initialState: EpisodeState = {
   list: [],
 }
 
 export const itemSlice = createSlice({
-  name: 'item',
+  name: 'episode',
   initialState,
   reducers: {
     append: (state, action: PayloadAction<Episode>) => {
@@ -44,7 +44,7 @@ export const itemSlice = createSlice({
       })
       readEpisode(action.payload)
     },
-    readAll: (state, action: PayloadAction<Source>) => {
+    readAll: (state, action: PayloadAction<Feed>) => {
       state.list = state.list.map((t) => {
         if (t.feedid === action.payload.id) {
           return { ...t, readed: true }
@@ -68,6 +68,6 @@ export const itemSlice = createSlice({
 export const { append, init, read, star, concat, readAll } = itemSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectSource = (state: RootState) => state.item.list
+export const selectFeed = (state: RootState) => state.episode.list
 
 export default itemSlice.reducer

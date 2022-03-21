@@ -81,7 +81,7 @@ export default function Reader({
                 icon={<Star color={isStarred ? 'plain' : ''} />}
                 onClick={() => {
                   dispatch({
-                    type: 'item/star',
+                    type: 'episode/star',
                     payload: { ...activeItem, starred: isStarred },
                   })
                   setIsStarred(!isStarred)

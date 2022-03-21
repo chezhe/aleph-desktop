@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import sourceReducer from './sourceSlice'
-import itemReducer from './itemSlice'
+import feedReducer from './feedSlice'
+import episodeReducer from './episodeSlice'
 
 const store = configureStore({
   reducer: {
-    source: sourceReducer,
-    item: itemReducer,
+    feed: feedReducer,
+    episode: episodeReducer,
   },
 })
 

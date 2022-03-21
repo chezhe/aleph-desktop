@@ -1,20 +1,20 @@
 import { XMLParser } from 'fast-xml-parser'
 import { fetch, ResponseType } from '@tauri-apps/api/http'
-import { Source } from '../types'
+import { Feed } from '../types'
 
 let fetching = false
 
-export function fetchSources(sources: Source[]) {
+export function fetchFeeds(feeds: Feed[]) {
   if (!fetching) {
     fetching = true
   } else {
     return Promise.resolve([])
   }
-  return Promise.all(sources.map(fetchFeed))
+  return Promise.all(feeds.map(fetchFeed))
 }
 
-export async function fetchFeed(source: Source): Promise<Source[]> {
-  return fetch(`${source.url}`, {
+export async function fetchFeed(feed: Feed): Promise<Feed[]> {
+  return fetch(`${feed.url}`, {
     method: 'GET',
     responseType: ResponseType.Text,
   })
@@ -25,9 +25,8 @@ export async function fetchFeed(source: Source): Promise<Source[]> {
       })
       const jObj = parser.parse(data as string)
       return (
-        jObj.rss?.channel?.item.map((item: any) =>
-          formatEpisode(item, source)
-        ) || []
+        jObj.rss?.channel?.item.map((item: any) => formatEpisode(item, feed)) ||
+        []
       )
     })
     .catch((err) => {
@@ -35,7 +34,7 @@ export async function fetchFeed(source: Source): Promise<Source[]> {
     })
 }
 
-export function formatEpisode(item: any, source: Source) {
+export function formatEpisode(item: any, feed: Feed) {
   let newItem = item
   if (item.enclosure) {
     newItem = {
@@ -62,7 +61,7 @@ export function formatEpisode(item: any, source: Source) {
     title: newItem.title || '',
     description: newItem.description || newItem['content:encoded'] || '',
     guid: newItem.guid || '',
-    feedid: source.id,
+    feedid: feed.id,
     readed: false,
     starred: false,
   }

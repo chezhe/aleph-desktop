@@ -3,16 +3,16 @@ export enum Category {
   FEED = 'feed',
 }
 
-export enum SourceType {
+export enum FeedType {
   RSS = 'rss',
   PODCAST = 'podcast',
 }
 
-export interface Source {
+export interface Feed {
   id?: string
   name: string
   url: string
-  type: SourceType
+  type: FeedType
 }
 
 export interface Episode {
