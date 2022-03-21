@@ -29,7 +29,7 @@ function MarkAnchor(props: any) {
   return <Anchor label={label} />
 }
 
-export default function ContentList({
+export default function EpisodeList({
   episodes,
   activeSource,
   activeItem,
@@ -62,13 +62,17 @@ export default function ContentList({
     const callback = (e: KeyboardEvent) => {
       const index = _eposides.findIndex((t) => t.link === activeItem?.link)
       console.log(index)
-      if (index >= 0 && activeItem) {
-        if (e.code === 'ArrowRight' && index < _eposides.length - 1) {
-          setActiveItem(_eposides[index + 1])
+      if (activeItem) {
+        if (index >= 0) {
+          if (e.code === 'ArrowRight' && index < _eposides.length - 1) {
+            setActiveItem(_eposides[index + 1])
+          }
+          if (e.code === 'ArrowLeft' && index > 0) {
+            setActiveItem(_eposides[index - 1])
+          }
         }
-        if (e.code === 'ArrowLeft' && index > 0) {
-          setActiveItem(_eposides[index - 1])
-        }
+      } else {
+        setActiveItem(_eposides[0])
       }
     }
     document.addEventListener('keydown', callback)
