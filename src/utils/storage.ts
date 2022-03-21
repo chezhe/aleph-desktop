@@ -9,7 +9,7 @@ export async function connect(): Promise<Database> {
   if (db) {
     return db
   }
-  db = await Database.load('sqlite:test6.db')
+  db = await Database.load('sqlite:profile.db')
   return db
 }
 
