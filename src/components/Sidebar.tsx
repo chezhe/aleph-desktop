@@ -74,7 +74,12 @@ export default function SourceList({
               />
             </Box>
 
-            {visible && <AddSource onClose={() => setVisible(false)} />}
+            {visible && (
+              <AddSource
+                onClose={() => setVisible(false)}
+                setActiveSource={setActiveSource}
+              />
+            )}
           </Box>
         )
       }}

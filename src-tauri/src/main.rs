@@ -12,7 +12,7 @@ fn main() {
 
   tauri::Builder::default()
     .plugin(TauriSql::default().add_migrations(
-      "sqlite:test6.db",
+      "sqlite:profile.db",
       vec![Migration {
         version: 1,
         description: "create feeds",

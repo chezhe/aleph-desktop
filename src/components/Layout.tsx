@@ -9,7 +9,6 @@ import Playing from './Playing'
 import PodPlayer from './PodPlayer'
 import Reader from './Reader'
 import Sidebar from './Sidebar'
-// import TitleBar from './TitleBar'
 
 export default function Layout({ children }: { children?: React.ReactNode }) {
   const [activeSource, setActiveSource] = useState<Source | undefined>()
