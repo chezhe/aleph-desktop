@@ -1,4 +1,4 @@
-import { Box, dark, Grommet, grommet, Main } from 'grommet'
+import { Box, Grommet, grommet, Main } from 'grommet'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { Episode, Source } from '../types'

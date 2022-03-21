@@ -1,4 +1,3 @@
-import { strictEqual } from 'assert'
 import { Box, Button, Image } from 'grommet'
 import { Close } from 'grommet-icons'
 import ReactAudioPlayer from 'react-audio-player'
