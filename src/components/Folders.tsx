@@ -27,7 +27,7 @@ export default function Folders({
           justify="between"
           gap="xsmall"
           pad="xxsmall"
-          background={activeSource?.id === 'Starred' ? 'light-6' : ''}
+          background={activeSource?.id === 'starred' ? 'light-6' : ''}
           style={{ boxShadow: 'none', borderRadius: 4, minHeight: 'unset' }}
           onClick={() => {
             setActiveSource({
