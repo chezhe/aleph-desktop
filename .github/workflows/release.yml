@@ -71,7 +71,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tagName: v__VERSION__
-          releaseName: 'Clash Verge v__VERSION__'
+          releaseName: 'Aleph v__VERSION__'
           releaseBody: 'More new features are now supported.'
           releaseDraft: false
           prerelease: true
@@ -80,8 +80,7 @@ jobs:
   #   needs: release
   #   runs-on: macos-latest
   #   if: |
-  #     startsWith(github.repository, 'chezhe') &&
-  #     startsWith(github.ref, 'refs/tags/v')
+  #     startsWith(github.repository, 'chezhe')
   #   steps:
   #     - name: Checkout repository
   #       uses: actions/checkout@v2
