@@ -1,5 +1,13 @@
 import dayjs from 'dayjs'
-import { Box, Button, Markdown, Text, Image, ThemeContext } from 'grommet'
+import {
+  Box,
+  Button,
+  Markdown,
+  Text,
+  Image,
+  ThemeContext,
+  Anchor,
+} from 'grommet'
 import { Episode, Source } from '../types'
 import TurndownService from 'turndown'
 import { Ascend, Descend, Checkmark } from 'grommet-icons'
@@ -11,7 +19,17 @@ import { PAGE_SIZE } from '../store/constants'
 
 const turndownService = new TurndownService()
 
-export default function ContentList({
+function MarkAnchor(props: any) {
+  let label = props.title
+  if (!label) {
+    if (props.children && typeof props.children[0] === 'string') {
+      label = props.children[0]
+    }
+  }
+  return <Anchor label={label} />
+}
+
+export default function EpisodeList({
   episodes,
   activeSource,
   activeItem,
@@ -37,6 +55,33 @@ export default function ContentList({
   if (isAscend) {
     _eposides = _.reverse(_eposides)
   }
+
+  _eposides = _eposides.slice(0, PAGE_SIZE * page)
+
+  useEffect(() => {
+    const callback = (e: KeyboardEvent) => {
+      const index = _eposides.findIndex((t) => t.link === activeItem?.link)
+      console.log(index)
+      if (activeItem) {
+        if (index >= 0) {
+          if (e.code === 'ArrowRight' && index < _eposides.length - 1) {
+            setActiveItem(_eposides[index + 1])
+          }
+          if (e.code === 'ArrowLeft' && index > 0) {
+            setActiveItem(_eposides[index - 1])
+          }
+        }
+      } else {
+        setActiveItem(_eposides[0])
+      }
+    }
+    document.addEventListener('keydown', callback)
+
+    return () => {
+      document.removeEventListener('keydown', callback)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_eposides])
 
   return (
     <ThemeContext.Consumer>
@@ -93,7 +138,7 @@ export default function ContentList({
                 style={{ overflowY: 'scroll' }}
                 ref={listContainer}
               >
-                {_eposides.slice(0, PAGE_SIZE * page).map((item, idx) => {
+                {_eposides.map((item, idx) => {
                   const digest = turndownService.turndown(
                     item?.description || ''
                   )
@@ -127,12 +172,17 @@ export default function ContentList({
                       <Text size="xsmall" color="dark-6">
                         {dayjs(item.pubDate).format('YYYY-MM-DD HH:mm')}
                       </Text>
-                      <Markdown className="markdown-digest">{digest}</Markdown>
+                      <Markdown
+                        className="markdown-digest"
+                        components={{ a: MarkAnchor }}
+                      >
+                        {digest}
+                      </Markdown>
                     </Box>
                   )
                 })}
 
-                {_eposides.length > PAGE_SIZE * page && (
+                {episodes.length > PAGE_SIZE * page && (
                   <Box align="center" pad="small">
                     <Button
                       label="Load more"

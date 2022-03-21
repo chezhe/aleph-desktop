@@ -1,4 +1,5 @@
 import {
+  Anchor,
   Box,
   Button,
   Heading,
@@ -11,11 +12,21 @@ import { Episode } from '../types'
 import TurndownService from 'turndown'
 import dayjs from 'dayjs'
 import NoContent from '../assets/no-content.png'
-import { Star } from 'grommet-icons'
+import { Compass, Star } from 'grommet-icons'
 import { useAppDispatch } from '../store/hooks'
 import { useState } from 'react'
 
 const turndownService = new TurndownService()
+
+function MarkAnchor(props: any) {
+  let label = props.title
+  if (!label) {
+    if (props.children && typeof props.children[0] === 'string') {
+      label = props.children[0]
+    }
+  }
+  return <Anchor label={label} href={props.href} target="_blank" />
+}
 
 export default function Reader({
   activeItem,
@@ -61,7 +72,11 @@ export default function Reader({
               gap="small"
               border={{ side: 'bottom', size: 'medium', color: 'light-6' }}
             >
-              {/* <Button icon={<Archive />} /> */}
+              <Button
+                icon={<Compass />}
+                href={activeItem.link}
+                target="_blank"
+              />
               <Button
                 icon={<Star color={isStarred ? 'plain' : ''} />}
                 onClick={() => {
@@ -79,7 +94,10 @@ export default function Reader({
             <Text size="small" color="dark-6" margin={{ vertical: 'small' }}>
               {dayjs(activeItem?.pubDate).format('YYYY-MM-DD HH:mm')}
             </Text>
-            <Markdown className="markdown-reader">
+            <Markdown
+              className="markdown-reader"
+              components={{ a: MarkAnchor }}
+            >
               {turndownService.turndown(content)}
             </Markdown>
           </Box>
