@@ -59,6 +59,10 @@ jobs:
         run: |
           yarn install --network-timeout 1000000
 
+      - name: Yarn build
+        run: |
+          yarn build
+
       - name: Tauri build
         uses: tauri-apps/tauri-action@0e558392ccadcb49bcc89e7df15a400e8f0c954d
         # enable cache even though failed
