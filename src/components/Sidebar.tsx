@@ -1,22 +1,22 @@
 import { Box, Button, ThemeContext } from 'grommet'
 import { Add, Search } from 'grommet-icons'
 import { useState } from 'react'
-import { Episode, Source } from '../types'
-import AddSource from './AddSource'
+import { Episode, Feed } from '../types'
+import AddFeed from './AddFeed'
 import Feeds from './Feeds'
 import Folders from './Folders'
 import Logo from './Logo'
 
-export default function SourceList({
-  sources,
-  activeSource,
+export default function FeedList({
+  feeds,
+  activeFeed,
   itemList,
-  setActiveSource,
+  setActiveFeed,
 }: {
-  sources: Source[]
-  activeSource: Source | undefined
+  feeds: Feed[]
+  activeFeed: Feed | undefined
   itemList: Episode[]
-  setActiveSource: (source: Source) => void
+  setActiveFeed: (feed: Feed) => void
 }) {
   const [visible, setVisible] = useState(false)
 
@@ -43,15 +43,12 @@ export default function SourceList({
               <Box>
                 <Logo />
               </Box>
-              <Folders
-                activeSource={activeSource}
-                setActiveSource={setActiveSource}
-              />
+              <Folders activeFeed={activeFeed} setActiveFeed={setActiveFeed} />
               <Feeds
-                sources={sources}
+                feeds={feeds}
                 itemList={itemList}
-                activeSource={activeSource}
-                setActiveSource={setActiveSource}
+                activeFeed={activeFeed}
+                setActiveFeed={setActiveFeed}
               />
             </Box>
 
@@ -75,9 +72,9 @@ export default function SourceList({
             </Box>
 
             {visible && (
-              <AddSource
+              <AddFeed
                 onClose={() => setVisible(false)}
-                setActiveSource={setActiveSource}
+                setActiveFeed={setActiveFeed}
               />
             )}
           </Box>

@@ -1,11 +1,14 @@
 import { Layer, Box, Text, Button } from 'grommet'
 import { Close, Edit, Trash } from 'grommet-icons'
+import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { SourceType } from '../types'
+import { Feed, FeedType } from '../types'
+import AddFeed from './AddFeed'
 import { RSS, Podcast } from './icons'
 
 export default function ManageFeed({ onClose }: { onClose: () => void }) {
-  const feeds = useAppSelector((state) => state.source.list)
+  const [editingEp, setEditingEp] = useState<Feed | undefined>()
+  const feeds = useAppSelector((state) => state.feed.list)
   const dispatch = useAppDispatch()
   return (
     <Layer onClickOutside={onClose}>
@@ -37,7 +40,7 @@ export default function ManageFeed({ onClose }: { onClose: () => void }) {
                 pad="small"
               >
                 <Box direction="row" align="center" gap="small">
-                  {feed.type === SourceType.PODCAST ? <Podcast /> : <RSS />}
+                  {feed.type === FeedType.PODCAST ? <Podcast /> : <RSS />}
                   <Text>{feed.name}</Text>
                 </Box>
 
@@ -46,10 +49,7 @@ export default function ManageFeed({ onClose }: { onClose: () => void }) {
                     icon={<Edit />}
                     size="small"
                     onClick={() => {
-                      // dispatch({
-                      //   type: 'source/remove',
-                      //   payload: feed,
-                      // })
+                      setEditingEp(feed)
                     }}
                   />
                   <Button
@@ -57,7 +57,7 @@ export default function ManageFeed({ onClose }: { onClose: () => void }) {
                     size="small"
                     onClick={() => {
                       dispatch({
-                        type: 'source/remove',
+                        type: 'feed/remove',
                         payload: feed,
                       })
                     }}
@@ -68,6 +68,15 @@ export default function ManageFeed({ onClose }: { onClose: () => void }) {
           })}
         </Box>
       </Box>
+      {!!editingEp && (
+        <AddFeed
+          feed={editingEp}
+          setActiveFeed={() => {}}
+          onClose={() => {
+            setEditingEp(undefined)
+          }}
+        />
+      )}
     </Layer>
   )
 }

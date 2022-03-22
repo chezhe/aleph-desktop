@@ -12,9 +12,10 @@ import { Episode } from '../types'
 import TurndownService from 'turndown'
 import dayjs from 'dayjs'
 import NoContent from '../assets/no-content.png'
-import { Compass, Star } from 'grommet-icons'
+import { CirclePlay, Compass, Star } from 'grommet-icons'
 import { useAppDispatch } from '../store/hooks'
 import { useState } from 'react'
+import { stripURL } from '../utils/format'
 
 const turndownService = new TurndownService()
 
@@ -30,8 +31,12 @@ function MarkAnchor(props: any) {
 
 export default function Reader({
   activeItem,
+  playingEp,
+  setPlayingEp,
 }: {
   activeItem: Episode | undefined
+  playingEp: Episode | undefined
+  setPlayingEp: (ep: Episode | undefined) => void
 }) {
   const dispatch = useAppDispatch()
   const [isStarred, setIsStarred] = useState(activeItem?.starred ?? false)
@@ -72,16 +77,18 @@ export default function Reader({
               gap="small"
               border={{ side: 'bottom', size: 'medium', color: 'light-6' }}
             >
-              <Button
-                icon={<Compass />}
-                href={activeItem.link}
-                target="_blank"
-              />
+              {activeItem.link.startsWith('https://') && (
+                <Button
+                  icon={<Compass />}
+                  href={activeItem.link}
+                  target="_blank"
+                />
+              )}
               <Button
                 icon={<Star color={isStarred ? 'plain' : ''} />}
                 onClick={() => {
                   dispatch({
-                    type: 'item/star',
+                    type: 'episode/star',
                     payload: { ...activeItem, starred: isStarred },
                   })
                   setIsStarred(!isStarred)
@@ -94,6 +101,41 @@ export default function Reader({
             <Text size="small" color="dark-6" margin={{ vertical: 'small' }}>
               {dayjs(activeItem?.pubDate).format('YYYY-MM-DD HH:mm')}
             </Text>
+            <Box pad={{ bottom: 'medium' }}>
+              {activeItem?.podurl && (
+                <Button
+                  icon={
+                    <Box
+                      width="200px"
+                      height="200px"
+                      align="center"
+                      justify="center"
+                      style={{
+                        WebkitBackdropFilter: 'blur(10px)',
+                        backdropFilter: 'blur(10px)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                      }}
+                    >
+                      <CirclePlay size="100px" />
+                    </Box>
+                  }
+                  style={{
+                    width: 200,
+                    height: 200,
+                    padding: 0,
+                    backgroundImage: `url(${stripURL(
+                      activeItem?.cover || ''
+                    )})`,
+                    backgroundSize: 'cover',
+                  }}
+                  onClick={() => {
+                    if (!playingEp || playingEp.link !== activeItem.link) {
+                      setPlayingEp(activeItem)
+                    }
+                  }}
+                />
+              )}
+            </Box>
             <Markdown
               className="markdown-reader"
               components={{ a: MarkAnchor }}

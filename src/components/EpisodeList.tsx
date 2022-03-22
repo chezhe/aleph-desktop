@@ -8,7 +8,7 @@ import {
   ThemeContext,
   Anchor,
 } from 'grommet'
-import { Episode, Source } from '../types'
+import { Episode, Feed } from '../types'
 import TurndownService from 'turndown'
 import { Ascend, Descend, Checkmark } from 'grommet-icons'
 import Launch from '../assets/launch.png'
@@ -31,12 +31,12 @@ function MarkAnchor(props: any) {
 
 export default function EpisodeList({
   episodes,
-  activeSource,
+  activeFeed,
   activeItem,
   setActiveItem,
 }: {
   episodes: Episode[]
-  activeSource: Source | undefined
+  activeFeed: Feed | undefined
   activeItem: Episode | undefined
   setActiveItem: (digest: Episode | undefined) => void
 }) {
@@ -49,7 +49,7 @@ export default function EpisodeList({
     if (listContainer && listContainer.current) {
       ;(listContainer.current as any).scrollTo(0, 0)
     }
-  }, [activeSource, isAscend])
+  }, [activeFeed, isAscend])
 
   let _eposides = _.sortBy(episodes, [(t) => dayjs(t.pubDate).unix()])
   if (isAscend) {
@@ -61,7 +61,6 @@ export default function EpisodeList({
   useEffect(() => {
     const callback = (e: KeyboardEvent) => {
       const index = _eposides.findIndex((t) => t.link === activeItem?.link)
-      console.log(index)
       if (activeItem) {
         if (index >= 0) {
           if (e.code === 'ArrowRight' && index < _eposides.length - 1) {
@@ -116,7 +115,7 @@ export default function EpisodeList({
                   icon={<Checkmark />}
                   a11yTitle="Read All"
                   onClick={() => {
-                    dispatch({ type: 'item/readAll', payload: activeSource })
+                    dispatch({ type: 'episode/readAll', payload: activeFeed })
                   }}
                 />
               </Box>
@@ -172,12 +171,6 @@ export default function EpisodeList({
                       <Text size="xsmall" color="dark-6">
                         {dayjs(item.pubDate).format('YYYY-MM-DD HH:mm')}
                       </Text>
-                      <Markdown
-                        className="markdown-digest"
-                        components={{ a: MarkAnchor }}
-                      >
-                        {digest}
-                      </Markdown>
                     </Box>
                   )
                 })}

@@ -1,19 +1,19 @@
 import { Box, Button, Heading, Text } from 'grommet'
 import { SettingsOption } from 'grommet-icons'
 import { useState } from 'react'
-import { Episode, Source } from '../types'
+import { Episode, Feed } from '../types'
 import ManageFeed from './ManageFeed'
 
 export default function Feeds({
-  sources,
-  activeSource,
+  feeds,
+  activeFeed,
   itemList,
-  setActiveSource,
+  setActiveFeed,
 }: {
-  sources: Source[]
-  activeSource: Source | undefined
+  feeds: Feed[]
+  activeFeed: Feed | undefined
   itemList: Episode[]
-  setActiveSource: (source: Source) => void
+  setActiveFeed: (feed: Feed) => void
 }) {
   const [visible, setVisible] = useState(false)
 
@@ -40,24 +40,34 @@ export default function Feeds({
       {visible && <ManageFeed onClose={() => setVisible(false)} />}
 
       <Box pad={{ left: 'small' }}>
-        {sources.map((source, idx) => (
+        {feeds.map((feed, idx) => (
           <Box
-            key={source.name}
+            key={feed.name}
             pad="xxsmall"
             direction="row"
             align="center"
             justify="between"
-            background={activeSource?.id === source.id ? 'light-6' : ''}
+            background={activeFeed?.id === feed.id ? 'light-6' : ''}
             onClick={() => {
-              setActiveSource(source)
+              setActiveFeed(feed)
             }}
             style={{ boxShadow: 'none', borderRadius: 4, minHeight: 'unset' }}
           >
-            <Text size="small">{source.name}</Text>
+            <Text
+              size="small"
+              style={{
+                maxWidth: 100,
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {feed.name}
+            </Text>
             <Box background="">
               <Text size="small" color="neutral-3" weight="bold">
                 {
-                  itemList.filter((t) => t.feedid === source.id && !t.readed)
+                  itemList.filter((t) => t.feedid === feed.id && !t.readed)
                     .length
                 }
               </Text>

@@ -2,20 +2,22 @@ import { sendNotification } from '@tauri-apps/api/notification'
 import { Box, Button, Layer, Text, TextInput, RadioButtonGroup } from 'grommet'
 import { useState } from 'react'
 import { useAppDispatch } from '../store/hooks'
-import { Source, SourceType } from '../types'
+import { Feed, FeedType } from '../types'
 import { fetchFeed } from '../utils/network'
-import { createFeed } from '../utils/storage'
+import { createFeed, removeFeed } from '../utils/storage'
 
-export default function AddSource({
+export default function AddFeed({
   onClose,
-  setActiveSource,
+  setActiveFeed,
+  feed = undefined,
 }: {
   onClose: () => void
-  setActiveSource: (source: Source) => void
+  setActiveFeed: (feed: Feed) => void
+  feed?: Feed | undefined
 }) {
-  const [name, setName] = useState('')
-  const [url, setURL] = useState('')
-  const [type, setType] = useState(SourceType.RSS)
+  const [name, setName] = useState(feed?.name ?? '')
+  const [url, setURL] = useState(feed?.url ?? '')
+  const [type, setType] = useState(feed?.type ?? FeedType.RSS)
   const [isAdding, setIsAdding] = useState(false)
   const dispatch = useAppDispatch()
   return (
@@ -50,9 +52,9 @@ export default function AddSource({
             <RadioButtonGroup
               name="doc"
               disabled={isAdding}
-              options={[SourceType.RSS, SourceType.PODCAST]}
+              options={[FeedType.RSS, FeedType.PODCAST]}
               value={type}
-              onChange={(event) => setType(event.target.value as SourceType)}
+              onChange={(event) => setType(event.target.value as FeedType)}
             />
           </Box>
         </Box>
@@ -70,33 +72,46 @@ export default function AddSource({
             disabled={isAdding}
             style={{ borderRadius: 0 }}
             onClick={async () => {
-              try {
-                setIsAdding(true)
-                const _feed = {
-                  name,
-                  url,
-                  type,
-                }
-                const newFeed = await createFeed(_feed)
-
-                const episodes = await fetchFeed(newFeed)
-                if (episodes.length === 0) {
-                  throw new Error('No episodes found')
+              const _feed = {
+                name,
+                url,
+                type,
+              }
+              if (feed) {
+                const newFeed = {
+                  ..._feed,
+                  id: feed.id,
                 }
                 dispatch({
-                  type: 'source/append',
+                  type: 'feed/update',
                   payload: newFeed,
                 })
-                dispatch({
-                  type: 'item/concat',
-                  payload: episodes,
-                })
-                setActiveSource(newFeed)
-                setIsAdding(false)
-                onClose()
-              } catch (error: any) {
-                setIsAdding(false)
-                sendNotification(error?.message)
+              } else {
+                try {
+                  setIsAdding(true)
+                  const newFeed = await createFeed(_feed)
+
+                  const episodes = await fetchFeed(newFeed)
+                  if (episodes.length === 0) {
+                    removeFeed(newFeed)
+                    throw new Error('No episodes found')
+                  }
+                  dispatch({
+                    type: 'feed/append',
+                    payload: newFeed,
+                  })
+                  dispatch({
+                    type: 'episode/concat',
+                    payload: episodes,
+                  })
+                  setActiveFeed(newFeed)
+
+                  setIsAdding(false)
+                  onClose()
+                } catch (error: any) {
+                  setIsAdding(false)
+                  sendNotification(error?.message)
+                }
               }
             }}
           />

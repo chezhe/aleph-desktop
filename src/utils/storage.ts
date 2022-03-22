@@ -1,7 +1,7 @@
 import Database from 'tauri-plugin-sql-api'
 import { v4 } from 'uuid'
 // import type { QueryResult } from 'tauri-plugin-sql-api'
-import { Episode, Source } from '../types'
+import { Episode, Feed } from '../types'
 
 let db: null | Database = null
 
@@ -13,7 +13,7 @@ export async function connect(): Promise<Database> {
   return db
 }
 
-export async function allFeeds(): Promise<Source[]> {
+export async function allFeeds(): Promise<Feed[]> {
   const db = await connect()
   return await db.select('SELECT * FROM feeds')
 }
@@ -23,7 +23,7 @@ export async function allEpisodes(): Promise<Episode[]> {
   return await db.select('SELECT * FROM episodes')
 }
 
-export async function createFeed(feed: Source): Promise<Source> {
+export async function createFeed(feed: Feed): Promise<Feed> {
   const newFeed = {
     ...feed,
     id: v4(),
@@ -67,7 +67,7 @@ export async function createEpisode(episode: Episode): Promise<Episode> {
   return episode
 }
 
-export async function updateFeed(feed: Source): Promise<Source> {
+export async function updateFeed(feed: Feed): Promise<Feed> {
   await db?.execute(
     'UPDATE feeds SET url = $1, type = $2, name = $3 WHERE id = $4',
     [feed.url, feed.type, feed.name, feed.id]
@@ -87,7 +87,7 @@ export async function readEpisode(episode: Episode): Promise<Episode> {
   return episode
 }
 
-export async function readEpisodeByFeedId(feed: Source) {
+export async function readEpisodeByFeedId(feed: Feed) {
   try {
     await db?.execute('UPDATE episodes SET readed = $1 WHERE feedid = $2', [
       true,
@@ -112,9 +112,20 @@ export async function starEpisode(
   }
   return episode
 }
-export async function removeFeed(feed: Source) {
+
+export async function removeFeed(feed: Feed) {
   try {
     await db?.execute('DELETE FROM feeds WHERE id = $1', [feed.id])
-    await db?.execute('DELETE FROM episodes WHERE feedid = $1', [feed.id])
+    await db?.execute(
+      'DELETE FROM episodes WHERE feedid = $1 AND starred = $2',
+      [feed.id, false]
+    )
+  } catch (error) {}
+}
+
+export async function clearStorage() {
+  try {
+    await db?.execute('DELETE FROM feeds')
+    await db?.execute('DELETE FROM episodes')
   } catch (error) {}
 }
