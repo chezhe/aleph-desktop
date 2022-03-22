@@ -1,33 +1,12 @@
 import dayjs from 'dayjs'
-import {
-  Box,
-  Button,
-  Markdown,
-  Text,
-  Image,
-  ThemeContext,
-  Anchor,
-} from 'grommet'
+import { Box, Button, Text, Image, ThemeContext } from 'grommet'
 import { Episode, Feed } from '../types'
-import TurndownService from 'turndown'
 import { Ascend, Descend, Checkmark } from 'grommet-icons'
 import Launch from '../assets/launch.png'
 import { useEffect, useRef, useState } from 'react'
 import _ from 'lodash'
 import { useAppDispatch } from '../store/hooks'
 import { PAGE_SIZE } from '../store/constants'
-
-const turndownService = new TurndownService()
-
-function MarkAnchor(props: any) {
-  let label = props.title
-  if (!label) {
-    if (props.children && typeof props.children[0] === 'string') {
-      label = props.children[0]
-    }
-  }
-  return <Anchor label={label} />
-}
 
 export default function EpisodeList({
   episodes,
@@ -138,9 +117,6 @@ export default function EpisodeList({
                 ref={listContainer}
               >
                 {_eposides.map((item, idx) => {
-                  const digest = turndownService.turndown(
-                    item?.description || ''
-                  )
                   let isActive = false
                   if (item.guid) {
                     isActive = item.guid === activeItem?.guid

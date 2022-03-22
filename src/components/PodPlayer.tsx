@@ -1,5 +1,4 @@
 import { Box, Button, Image } from 'grommet'
-import { Close } from 'grommet-icons'
 import ReactAudioPlayer from 'react-audio-player'
 import { Episode } from '../types'
 import { stripURL } from '../utils/format'
