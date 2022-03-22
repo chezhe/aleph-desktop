@@ -118,8 +118,8 @@ export default function Reader({
                       align="center"
                       justify="center"
                       style={{
-                        WebkitBackdropFilter: 'blur(10px)',
-                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(3px)',
+                        backdropFilter: 'blur(3px)',
                         backgroundColor: 'rgba(255, 255, 255, 0.5)',
                       }}
                     >

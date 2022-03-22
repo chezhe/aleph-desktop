@@ -24,9 +24,13 @@ export async function fetchFeed(feed: Feed): Promise<Feed[]> {
         ignoreAttributes: false,
       })
       const jObj = parser.parse(data as string)
+      const extra = {
+        image: jObj.rss?.channel?.image,
+      }
       return (
-        jObj.rss?.channel?.item.map((item: any) => formatEpisode(item, feed)) ||
-        []
+        jObj.rss?.channel?.item.map((item: any) =>
+          formatEpisode(item, feed, extra)
+        ) || []
       )
     })
     .catch((err) => {
@@ -35,7 +39,13 @@ export async function fetchFeed(feed: Feed): Promise<Feed[]> {
     })
 }
 
-export function formatEpisode(item: any, feed: Feed) {
+export function formatEpisode(
+  item: any,
+  feed: Feed,
+  extra: {
+    image: any
+  }
+) {
   let newItem = item
   if (item.enclosure) {
     newItem = {
@@ -47,10 +57,10 @@ export function formatEpisode(item: any, feed: Feed) {
       },
     }
   }
-  if (newItem['itunes:image']) {
+  if (!newItem.image) {
     newItem = {
       ...newItem,
-      cover: newItem['itunes:image']['@_href'],
+      image: newItem['itunes:image'] || extra.image,
     }
   }
   let guid = ''
@@ -60,7 +70,6 @@ export function formatEpisode(item: any, feed: Feed) {
   }
 
   let podurl = ''
-  console.log(newItem)
   if (
     newItem.enclosure &&
     newItem.enclosure.type &&
@@ -69,11 +78,18 @@ export function formatEpisode(item: any, feed: Feed) {
     podurl = newItem.enclosure.url || ''
   }
 
+  let cover = newItem.cover
+  if (!cover && newItem.image) {
+    cover = newItem.image.url || newItem.image['@_href'] || ''
+  }
+
+  const link = `${newItem.link}?${guid}`
+
   newItem = {
-    link: newItem.link || guid,
+    link,
     author: newItem.author || newItem['itunes:author'] || '',
     pubDate: newItem.pubDate || '',
-    cover: newItem.cover || '',
+    cover,
     podurl,
     title: newItem.title || '',
     description: newItem['content:encoded'] || newItem.description || '',
