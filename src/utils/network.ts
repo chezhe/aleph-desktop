@@ -59,12 +59,22 @@ export function formatEpisode(item: any, feed: Feed) {
       typeof newItem.guid === 'string' ? newItem.guid : newItem.guid['#text']
   }
 
+  let podurl = ''
+  console.log(newItem)
+  if (
+    newItem.enclosure &&
+    newItem.enclosure.type &&
+    newItem.enclosure.type.startsWith('audio/')
+  ) {
+    podurl = newItem.enclosure.url || ''
+  }
+
   newItem = {
     link: newItem.link || guid,
     author: newItem.author || newItem['itunes:author'] || '',
     pubDate: newItem.pubDate || '',
     cover: newItem.cover || '',
-    podurl: newItem.enclosure?.url || '',
+    podurl,
     title: newItem.title || '',
     description: newItem['content:encoded'] || newItem.description || '',
     guid: guid || '',
