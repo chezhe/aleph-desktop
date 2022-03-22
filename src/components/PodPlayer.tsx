@@ -1,16 +1,19 @@
-import { Box, Image } from 'grommet'
+import { Box, Button, Image } from 'grommet'
+import { Close } from 'grommet-icons'
 import ReactAudioPlayer from 'react-audio-player'
 import { Episode } from '../types'
 import { stripURL } from '../utils/format'
 
 export default function PodPlayer({
-  activeItem,
+  playingEp,
   setPlayingEp,
+  setActiveItem,
 }: {
-  activeItem: Episode | undefined
+  playingEp: Episode | undefined
   setPlayingEp: (ep: Episode | undefined) => void
+  setActiveItem: (ep: Episode | undefined) => void
 }) {
-  if (!activeItem || !activeItem.podurl) {
+  if (!playingEp) {
     return null
   }
 
@@ -25,15 +28,31 @@ export default function PodPlayer({
       background="light-5"
       width="calc(100vw - 500px)"
     >
-      <Image src={stripURL(activeItem?.cover || '')} height="80px" alt="" />
+      <Image src={stripURL(playingEp?.cover || '')} height="80px" alt="" />
       <ReactAudioPlayer
-        src={stripURL(activeItem.podurl)}
+        src={stripURL(playingEp.podurl)}
+        autoPlay
         controls
         style={{ width: '100%' }}
         onPlay={() => {
-          setPlayingEp(activeItem)
+          // setPlayingEp(playingEp)
         }}
       />
+      <Box width="100px" gap="xsmall">
+        <Button
+          size="small"
+          label="Close"
+          style={{ borderRadius: 0 }}
+          onClick={() => setPlayingEp(undefined)}
+        />
+
+        <Button
+          size="small"
+          label="EP"
+          style={{ borderRadius: 0 }}
+          onClick={() => setActiveItem(playingEp)}
+        />
+      </Box>
     </Box>
   )
 }

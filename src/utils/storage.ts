@@ -112,12 +112,20 @@ export async function starEpisode(
   }
   return episode
 }
+
 export async function removeFeed(feed: Feed) {
   try {
     await db?.execute('DELETE FROM feeds WHERE id = $1', [feed.id])
     await db?.execute(
-      'DELETE FROM episodes WHERE feedid = $1 and starred = true',
-      [feed.id]
+      'DELETE FROM episodes WHERE feedid = $1 AND starred = $2',
+      [feed.id, false]
     )
+  } catch (error) {}
+}
+
+export async function clearStorage() {
+  try {
+    await db?.execute('DELETE FROM feeds')
+    await db?.execute('DELETE FROM episodes')
   } catch (error) {}
 }

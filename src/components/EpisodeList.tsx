@@ -61,7 +61,6 @@ export default function EpisodeList({
   useEffect(() => {
     const callback = (e: KeyboardEvent) => {
       const index = _eposides.findIndex((t) => t.link === activeItem?.link)
-      console.log(index)
       if (activeItem) {
         if (index >= 0) {
           if (e.code === 'ArrowRight' && index < _eposides.length - 1) {
@@ -172,12 +171,6 @@ export default function EpisodeList({
                       <Text size="xsmall" color="dark-6">
                         {dayjs(item.pubDate).format('YYYY-MM-DD HH:mm')}
                       </Text>
-                      <Markdown
-                        className="markdown-digest"
-                        components={{ a: MarkAnchor }}
-                      >
-                        {digest}
-                      </Markdown>
                     </Box>
                   )
                 })}

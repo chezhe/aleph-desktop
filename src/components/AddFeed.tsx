@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useAppDispatch } from '../store/hooks'
 import { Feed, FeedType } from '../types'
 import { fetchFeed } from '../utils/network'
-import { createFeed } from '../utils/storage'
+import { createFeed, removeFeed } from '../utils/storage'
 
 export default function AddFeed({
   onClose,
@@ -72,27 +72,28 @@ export default function AddFeed({
             disabled={isAdding}
             style={{ borderRadius: 0 }}
             onClick={async () => {
-              try {
-                setIsAdding(true)
-                const _feed = {
-                  name,
-                  url,
-                  type,
+              const _feed = {
+                name,
+                url,
+                type,
+              }
+              if (feed) {
+                const newFeed = {
+                  ..._feed,
+                  id: feed.id,
                 }
-                if (feed) {
-                  const newFeed = {
-                    ..._feed,
-                    id: feed.id,
-                  }
-                  dispatch({
-                    type: 'feed/update',
-                    payload: newFeed,
-                  })
-                } else {
+                dispatch({
+                  type: 'feed/update',
+                  payload: newFeed,
+                })
+              } else {
+                try {
+                  setIsAdding(true)
                   const newFeed = await createFeed(_feed)
 
                   const episodes = await fetchFeed(newFeed)
                   if (episodes.length === 0) {
+                    removeFeed(newFeed)
                     throw new Error('No episodes found')
                   }
                   dispatch({
@@ -104,12 +105,13 @@ export default function AddFeed({
                     payload: episodes,
                   })
                   setActiveFeed(newFeed)
+
+                  setIsAdding(false)
+                  onClose()
+                } catch (error: any) {
+                  setIsAdding(false)
+                  sendNotification(error?.message)
                 }
-                setIsAdding(false)
-                onClose()
-              } catch (error: any) {
-                setIsAdding(false)
-                sendNotification(error?.message)
               }
             }}
           />

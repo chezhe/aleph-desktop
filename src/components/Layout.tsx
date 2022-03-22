@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { Episode, Feed } from '../types'
 import { fetchFeed } from '../utils/network'
-import { allEpisodes, allFeeds, connect } from '../utils/storage'
+import { allEpisodes, allFeeds, clearStorage, connect } from '../utils/storage'
 import EpisodeList from './EpisodeList'
-import Playing from './Playing'
 import PodPlayer from './PodPlayer'
 import Reader from './Reader'
 import Sidebar from './Sidebar'
@@ -23,6 +22,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   useEffect(() => {
     connect().then(() => {})
     setTimeout(() => {
+      // clearStorage()
       allFeeds()
         .then((feeds: Feed[]) => {
           dispatch({
@@ -80,14 +80,16 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
               dispatch({ type: 'episode/read', payload: item })
             }}
           />
-          <Reader activeItem={activeItem} />
-
-          <PodPlayer activeItem={activeItem} setPlayingEp={setPlayingEp} />
-
-          <Playing
+          <Reader
             activeItem={activeItem}
             playingEp={playingEp}
             setPlayingEp={setPlayingEp}
+          />
+
+          <PodPlayer
+            playingEp={playingEp}
+            setPlayingEp={setPlayingEp}
+            setActiveItem={setActiveItem}
           />
         </Box>
       </Main>

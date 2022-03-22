@@ -30,6 +30,7 @@ export async function fetchFeed(feed: Feed): Promise<Feed[]> {
       )
     })
     .catch((err) => {
+      console.log(err)
       return []
     })
 }
@@ -52,8 +53,12 @@ export function formatEpisode(item: any, feed: Feed) {
       cover: newItem['itunes:image']['@_href'],
     }
   }
-  const guid =
-    typeof newItem.guid === 'string' ? newItem.guid : newItem.guid['#text']
+  let guid = ''
+  if (newItem.guid) {
+    guid =
+      typeof newItem.guid === 'string' ? newItem.guid : newItem.guid['#text']
+  }
+
   newItem = {
     link: newItem.link || guid,
     author: newItem.author || newItem['itunes:author'] || '',
@@ -61,7 +66,7 @@ export function formatEpisode(item: any, feed: Feed) {
     cover: newItem.cover || '',
     podurl: newItem.enclosure?.url || '',
     title: newItem.title || '',
-    description: newItem.description || newItem['content:encoded'] || '',
+    description: newItem['content:encoded'] || newItem.description || '',
     guid: guid || '',
     feedid: feed.id,
     readed: false,
