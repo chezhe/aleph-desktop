@@ -59,8 +59,19 @@ h3,
 h4,
 h5,
 h6,
+code,
+pre,
 .markdown-reader p {
   max-width: unset !important;
+  word-break: break-all !important;
+  white-space: pre-wrap !important;
+}
+
+.markdown-reader pre,
+.markdown-reader blockquote {
+  background-color: antiquewhite;
+  padding: 10px;
+  margin: 0;
 }
 
 .markdown-reader img {

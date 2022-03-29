@@ -14,7 +14,7 @@ import dayjs from 'dayjs'
 import NoContent from '../assets/no-content.png'
 import { CirclePlay, Compass, Star } from 'grommet-icons'
 import { useAppDispatch } from '../store/hooks'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { stripURL } from '../utils/format'
 
 const turndownService = new TurndownService()
@@ -39,7 +39,13 @@ export default function Reader({
   setPlayingEp: (ep: Episode | undefined) => void
 }) {
   const dispatch = useAppDispatch()
+  const readerContainer = useRef(null)
   const [isStarred, setIsStarred] = useState(activeItem?.starred ?? false)
+  useEffect(() => {
+    if (readerContainer && readerContainer.current) {
+      ;(readerContainer.current as any).scrollTo(0, 0)
+    }
+  }, [activeItem])
 
   if (!activeItem) {
     return (
@@ -69,6 +75,7 @@ export default function Reader({
             height="100vh"
             background={isDark ? 'dark-2' : '#f3f1eb'}
             style={{ overflowY: 'scroll', position: 'relative' }}
+            ref={readerContainer}
           >
             <Box
               direction="row"
@@ -111,8 +118,8 @@ export default function Reader({
                       align="center"
                       justify="center"
                       style={{
-                        WebkitBackdropFilter: 'blur(10px)',
-                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(3px)',
+                        backdropFilter: 'blur(3px)',
                         backgroundColor: 'rgba(255, 255, 255, 0.5)',
                       }}
                     >

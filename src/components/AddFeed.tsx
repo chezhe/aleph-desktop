@@ -86,6 +86,7 @@ export default function AddFeed({
                   type: 'feed/update',
                   payload: newFeed,
                 })
+                onClose()
               } else {
                 try {
                   setIsAdding(true)
