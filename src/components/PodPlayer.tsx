@@ -75,7 +75,7 @@ export default function PodPlayer({
   setActiveItem: (ep: Episode | undefined) => void
 }) {
   const { audio, duration, currentTime, playing, setPlaying, ready } = useAudio(
-    playingEp?.podurl
+    stripURL(playingEp?.podurl)
   )
 
   if (!playingEp || !audio) {

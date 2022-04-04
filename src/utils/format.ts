@@ -21,7 +21,10 @@ export const excludeItem = (item: Episode, arr: Episode[]) => {
   return arr.filter((t) => t.link !== item.link)
 }
 
-export const stripURL = (url: string) => {
+export const stripURL = (url?: string) => {
+  if (!url) {
+    return ''
+  }
   let result = url
   if (url.includes('jt.ximalaya.com')) {
     const parsed = parse(url, true)
