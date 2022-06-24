@@ -1,7 +1,7 @@
 import { Box, Button, RangeInput, Text, Image } from 'grommet'
 import { Pause, Play, Power } from 'grommet-icons'
 import { useEffect, useState } from 'react'
-import { Episode, TranscriptWord } from '../types'
+import { Episode } from '../types'
 import { stripURL } from '../utils/format'
 import Loading from 'react-loading'
 import { transcript } from '../utils/network'
@@ -22,7 +22,6 @@ const useAudio = (url?: string) => {
   const [ready, setReady] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
-  const [words, setWords] = useState<TranscriptWord[]>([])
 
   useEffect(() => {
     let tick: NodeJS.Timer
@@ -67,7 +66,7 @@ const useAudio = (url?: string) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playing])
 
-  return { audio, playing, currentTime, duration, setPlaying, ready, words }
+  return { audio, playing, currentTime, duration, setPlaying, ready }
 }
 
 export default function PodPlayer({
