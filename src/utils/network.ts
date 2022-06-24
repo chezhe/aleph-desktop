@@ -38,11 +38,16 @@ export async function fetchFeed(feed: Feed): Promise<Feed[]> {
       const extra = {
         image: jObj.rss?.channel?.image,
       }
-      return (
-        jObj.rss?.channel?.item.map((item: any) =>
-          formatEpisode(item, feed, extra)
-        ) || []
-      )
+
+      let items = []
+      if (Array.isArray(jObj?.feed?.entry)) {
+        items = jObj?.feed?.entry
+      } else if (Array.isArray(jObj.rss?.channel?.item)) {
+        items = jObj.rss?.channel?.item
+      }
+      console.log('fetchFeed', items)
+
+      return items.map((item: any) => formatEpisode(item, feed, extra))
     })
     .catch((err) => {
       console.log(err)
@@ -94,16 +99,31 @@ export function formatEpisode(
     cover = newItem.image.url || newItem.image['@_href'] || ''
   }
 
-  const link = `${newItem.link}?${guid}`
+  let link = ''
+  if (typeof newItem.link === 'string') {
+    link = `${newItem.link}?${guid}`
+  } else {
+    link = newItem.id || newItem.link['@_href']
+  }
+
+  let author = ''
+  if (newItem.author) {
+    author = newItem.author.name ?? (newItem.author || newItem['itunes:author'])
+  }
+
+  let description = newItem['content:encoded'] || newItem.description || ''
+  if (newItem.content) {
+    description = newItem.content['#text']
+  }
 
   newItem = {
     link,
-    author: newItem.author || newItem['itunes:author'] || '',
-    pubDate: newItem.pubDate || '',
+    author,
+    pubDate: newItem.pubDate || newItem.published || '',
     cover,
     podurl,
     title: newItem.title || '',
-    description: newItem['content:encoded'] || newItem.description || '',
+    description,
     guid: guid || '',
     feedid: feed.id,
     readed: false,
