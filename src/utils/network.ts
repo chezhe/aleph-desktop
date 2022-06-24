@@ -1,8 +1,19 @@
 import { XMLParser } from 'fast-xml-parser'
-import { fetch, ResponseType } from '@tauri-apps/api/http'
+import { fetch, ResponseType, getClient, Body } from '@tauri-apps/api/http'
 import { Feed } from '../types'
 
 let fetching = false
+
+export async function transcript(url: string) {
+  const client = await getClient()
+  return client.post(
+    `https://aleph.chezhe.dev/api/transcript`,
+    Body.json({
+      audio_url: url,
+      language_code: 'en',
+    })
+  )
+}
 
 export function fetchFeeds(feeds: Feed[]) {
   if (!fetching) {

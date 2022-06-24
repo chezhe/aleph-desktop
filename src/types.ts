@@ -38,3 +38,9 @@ export interface Channel {
   title: string
   item: Episode[]
 }
+
+export interface TranscriptWord {
+  text: string
+  start: number
+  end: number
+}

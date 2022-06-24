@@ -30,7 +30,6 @@ fn main() {
       MenuEntry::Submenu(Submenu::new(
         &_ctx.package_info().name,
         Menu::with_items([
-          MenuItem::About(_ctx.package_info().name.clone()).into(),
           MenuItem::Separator.into(),
           MenuItem::Services.into(),
           MenuItem::Separator.into(),
