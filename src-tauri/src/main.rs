@@ -77,12 +77,10 @@ fn main() {
     .on_menu_event(|event| {
       let event_name = event.menu_item_id();
       event.window().emit("menu", event_name).unwrap();
-      match event_name {
-        "Learn More" => {
-          let link = "https://github.com/chezhe/aleph".to_string();
-          shell::open(&event.window().shell_scope(), link, None).unwrap();
-        }
-        _ => {}
+
+      if let "Learn More" = event_name {
+        let link = "https://github.com/chezhe/aleph";
+        shell::open(&event.window().shell_scope(), link, None).unwrap();
       }
     })
     .run(tauri::generate_context!())
