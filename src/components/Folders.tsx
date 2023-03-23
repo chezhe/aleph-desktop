@@ -11,8 +11,14 @@ export default function Folders({
   setActiveFeed: (feed: Feed) => void
 }) {
   const starreds = useAppSelector((state) =>
-    state.episode.list.filter((t) => t.starred)
+    state.episode.list.filter((t) => {
+      if (typeof t.starred === 'string') {
+        return t.starred === 'true'
+      }
+      return t.starred
+    })
   )
+
   return (
     <Box margin={{ vertical: 'medium' }}>
       <Box>

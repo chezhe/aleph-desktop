@@ -16,6 +16,7 @@ export default function Feeds({
   setActiveFeed: (feed: Feed) => void
 }) {
   const [visible, setVisible] = useState(false)
+  console.log('itemList', itemList)
 
   return (
     <Box>
@@ -67,8 +68,9 @@ export default function Feeds({
             <Box background="">
               <Text size="small" color="neutral-3" weight="bold">
                 {
-                  itemList.filter((t) => t.feedid === feed.id && !t.readed)
-                    .length
+                  itemList.filter(
+                    (t) => t.feedid === feed.id && t.readed !== 'true'
+                  ).length
                 }
               </Text>
             </Box>
