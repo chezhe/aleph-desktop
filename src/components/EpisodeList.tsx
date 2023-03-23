@@ -131,7 +131,7 @@ export default function EpisodeList({
                         minHeight: 'unset',
                         cursor: 'pointer',
                         boxShadow: 'none',
-                        opacity: item.readed ? 0.7 : 1,
+                        opacity: item.readed === 'true' ? 0.7 : 1,
                       }}
                       border={{
                         side: 'bottom',

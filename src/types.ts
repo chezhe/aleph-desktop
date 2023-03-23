@@ -23,8 +23,8 @@ export interface Episode {
   description: string
   podurl: string
   guid: string
-  readed: boolean
-  starred: boolean
+  readed: boolean | string
+  starred: boolean | string
   feedid: string
   cover: string
 }
