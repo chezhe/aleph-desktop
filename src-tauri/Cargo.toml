@@ -28,6 +28,6 @@ default = [ "custom-protocol" ]
 custom-protocol = [ "tauri/custom-protocol" ]
 
 [dependencies.tauri-plugin-sql]
-git = "https://github.com/tauri-apps/tauri-plugin-sql"
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "dev"
 features = ["sqlite"]
-branch = "release"
