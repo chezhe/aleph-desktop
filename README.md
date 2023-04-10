@@ -7,7 +7,3 @@
 Aleph (or א or 阿莱夫, ˈɑːlɛf) is an RSS reader & podcast client built for the desktop.
 
 ![Example](https://aleph.chezhe.dev/screenshot.png)
-
-## TODO
-
-- [x] Add transcript for podcast(use https://www.assemblyai.com/)

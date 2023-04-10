@@ -1,12 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
-import feedReducer from './feedSlice'
-import episodeReducer from './episodeSlice'
 
 const store = configureStore({
-  reducer: {
-    feed: feedReducer,
-    episode: episodeReducer,
-  },
+  reducer: {},
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
