@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Anchor, Button, Sheet, Text, YStack } from 'tamagui'
 import { Feed } from '@/types'
 import Favicon from '@/components/Favicon'
+import { useToastController } from '@tamagui/toast'
 
 export default function FeedSheet({
   feed,
@@ -16,6 +17,8 @@ export default function FeedSheet({
   const oldSub = useFeed(feed?.url)
   const [position, setPosition] = useState(0)
 
+  const { show } = useToastController()
+
   const onSub = async () => {
     try {
       if (!feed) {
@@ -24,18 +27,18 @@ export default function FeedSheet({
       if (oldSub) {
         if (oldSub.deleted) {
           await resubFeed(feed)
-          // Toast.success('Subscribed!')
+          show('Subscribed!')
         } else {
           await unsubFeed(feed)
-          // Toast.success('Unsubscribed')
+          show('Unsubscribed')
         }
       } else {
         await subFeed(feed)
-        // Toast.success('Subscribed!')
+        show('Subscribed!')
       }
       onOpenChange(false)
     } catch (error) {
-      // Toast.error(error)
+      show('Error', { message: (error as any).message })
     }
   }
 

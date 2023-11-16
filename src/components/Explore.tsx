@@ -15,7 +15,7 @@ export default function Explore() {
   }
 
   return (
-    <YStack>
+    <ScrollView>
       {explore.map((item) => {
         return (
           <YStack key={item.title} px={4} py={8}>
@@ -74,6 +74,6 @@ export default function Explore() {
         )
       })}
       <FeedSheet feed={feed} onOpenChange={onOpenChange} />
-    </YStack>
+    </ScrollView>
   )
 }

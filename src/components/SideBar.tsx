@@ -86,11 +86,15 @@ export default function SideBar() {
                 fontSize={32}
                 fontFamily="Gilroy-Bold"
                 width={200}
-                color={MAIN_COLOR}
+                color={isActive ? MAIN_COLOR : '#999'}
               >
                 {title}
               </Text>
-              <Icon width={30} height={30} color={MAIN_COLOR} />
+              <Icon
+                width={30}
+                height={30}
+                color={isActive ? MAIN_COLOR : '#999'}
+              />
             </XStack>
           )
         })}
